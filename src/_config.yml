@@ -18,4 +18,6 @@ exclude: [
     "gulpfile.js"
 ]
 
-keep_files: []
+keep_files: [
+    "assets"
+]
