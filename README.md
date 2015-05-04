@@ -1,8 +1,8 @@
-# Jekyll Scaffolding Workflow (WIP)
+# Scaffolding Workflow (WIP)
 
 ## My tools and workflow for building fast and accessible cross-device web applications
 
-Jekyll Scaffolding is a set of tools that combine to form the workflow I use on
+Scaffolding is a set of tools that combine to form the workflow I use on
 projects. This workflow is designed to help deliver modern web experiences that
 are accessible to the widest range of devices possible.
 
