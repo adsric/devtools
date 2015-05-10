@@ -1,10 +1,6 @@
 # SCAFFOLDR (WIP)
 
-## My tools and workflow for building fast and accessible cross-device web applications
-
-Scaffoldr is a set of tools that combine to form the workflow I use on
-projects. This workflow is designed to help deliver modern web experiences that
-are accessible to the widest range of devices possible.
+Scaffoldr is a set of tools that combine to form my workflow.
 
 This workflow utilizes the following tools, all of which are independent themselves.
 
@@ -23,8 +19,8 @@ These are the stand out commands available:-
 
 `$ gulp serve`
 
-Builds project and launches a local server
+Builds assets and Launch a server.
 
 `$ gulp`
 
-Builds production ready code for project
+Builds assets.
