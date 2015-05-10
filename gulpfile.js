@@ -1,195 +1,119 @@
 /**
- * SCAFFOLDING
+ * SCAFFOLDR
  *
  * Tasks
- * |
- * |– lint:js
- * |    |- gulpfile         # linting of gulpfile
- * |    |- all JS           # linting of all JS (excluding 3rd party and vendor)
- * |
- * |– js
- * |    |- concatenate      # Concatenates all JS to `main.js`
- * |    |– uglifyJS         # Minifying of `main.js` output `main.min.js`
- * |
- * |– images
- * |    |– minify           # Minifying of PNG, JPEG, GIF and SVG images
- * |
- * |– styles
- * |    |– compile          # Generate CSS from SCSS to `main.css`
- * |    |- prefix           # Prefix generated CSS
- * |    |– concatenate      # All CSS to `all.css`
- * |    |- minify           # Minifying of stylesheet
- * |
- * |– styles:fallback
- * |    |– compile          # Generate IE CSS from `main.css`
- * |    |- minify           # Minifying of `ie.css`
- * |
- * |– jekyll
- * |    |– build            # Building of Jekyll
- * |    |- rebuild          # Re-building of Jekyll with a page reload
- * |
- * |– server
- * |    |- browsersync      # Local server powered by BrowserSync
- * |    |– watch            # Watch for changes on all source files
- * |
- * |– clean                 # Delete the output directory and files
- * |- serve                 # Execute build and local server
- * |– build (default)       # Execute all build tasks
- * |
+ *
+ * 1. lint:js       # linting of all JS (excl plugin and vendor).
+ * 2. js            # Concatenate & minify all JavaScript to `all.js`.
+ * 3. images        # Optimize PNG, JPEG, GIF and SVG images.
+ * 4. css           # Generate & prefix CSS using nextcss, minify to `all.css`.
+ * 5. server        # BrowserSync server and watch all src files.
+ *
+ * Commands
+ *
+ * 1. clean         # Delete the output files.
+ * 2. serve         # Build all assets and launch BrowserSync server.
+ * 3. build         # Build all assets.
  */
 
 var gulp        = require('gulp');
 var plugins     = require('gulp-load-plugins')();
-var cp          = require('child_process');
-
 var browserSync = require('browser-sync');
 var reload      = browserSync.reload;
-
 var runSequence = require('run-sequence');
 
-// Directories
-var dirs = {
-    source: 'src',
-    output: 'dist'
-};
-
 gulp.task('lint:js', function () {
-    return gulp.src([
+  return gulp.src([
 
-        // Lint all JS
-        dirs.source + '/assets/js/*.js',
+      'assets/js/*.js',
+      '!assets/js/jquery*.js',              // Don't lint plugins
+      '!assets/js/*.min.js'                 // Don't lint minified JS
 
-        // Exclude the following files
-        '!' + dirs.source + '/assets/js/jquery*.js',
-        '!' + dirs.source + '/assets/js/*.min.js'
-
-    ]).pipe(reload({stream: true, once: true}))
-      .pipe(plugins.jshint())
-      .pipe(plugins.jshint.reporter('jshint-stylish'))
-      .pipe(plugins.if(!browserSync.active, plugins.jshint.reporter('fail')));
+  ]).pipe(reload({stream: true, once: true}))
+    .pipe(plugins.jshint())
+    .pipe(plugins.jshint.reporter('jshint-stylish'))
+    .pipe(plugins.if(!browserSync.active, plugins.jshint.reporter('fail')));
 });
 
 gulp.task('js', function () {
-    return gulp.src([
+  return gulp.src([
 
-        //'bower_components/jquery/dist/jquery.js',
-        dirs.source + '/assets/js/*.js',
+    //'bower_components/jquery/dist/jquery.js',
+    'assets/js/*.js',
+    '!/assets/js/*.min.js'                  // Dont't process minifed JS
 
-        // Exclude the following files
-        '!' + dirs.source + '/assets/js/*.min.js'
-
-    ]).pipe(plugins.concat('all.js'))
-      .pipe(plugins.uglify())
-      .pipe(gulp.dest(dirs.output + '/assets/js/dist'))
-      .pipe(plugins.size({title: 'js'}));
+  ]).pipe(plugins.concat('all.js'))
+    .pipe(plugins.uglify())
+    .pipe(gulp.dest('assets/js/dist'))
+    .pipe(plugins.size({title: 'js'}));
 });
 
 gulp.task('images', function () {
-    return gulp.src(dirs.source + '/assets/images/**/*')
-        .pipe(plugins.imagemin({
-            progressive: true,
-            interlaced: true
-        }))
-        .pipe(gulp.dest(dirs.output + '/assets/images'))
-        .pipe(plugins.size({title: 'images'}));
-});
-
-gulp.task('styles', function () {
-
-    var PREFIX_BROWSERS = [
-        'last 2 versions',
-        'ie 9',
-        'Firefox ESR',
-        'Opera 12.1'
-    ];
-
-    return gulp.src([
-
-            dirs.source + '/assets/scss/*.scss',
-            dirs.source + '/assets/css/*.css'
-
-    ]).pipe(plugins.changed('scss', {extension: '.scss'}))
-      .pipe(plugins.sass({
-          precision: 10,
-          onError: console.error.bind(console, 'Sass error:')
+  return gulp.src('assets/images/**/*')
+    .pipe(plugins.imagemin({
+      progressive: true,
+      interlaced: true
     }))
-      .pipe(plugins.autoprefixer({browsers: PREFIX_BROWSERS}))
-      .pipe(gulp.dest('.tmp'))
-      .pipe(plugins.changed('css', {extension: '.css'}))
-      .pipe(plugins.concat('all.css'))
-      .pipe(plugins.csso())
-      .pipe(gulp.dest(dirs.output + '/assets/css/dist'))
-      .pipe(plugins.size({title: 'styles'}));
+    .pipe(gulp.dest('assets/images'))
+    .pipe(plugins.size({title: 'images'}));
 });
 
-gulp.task('styles:fallback', function () {
-    return gulp.src('.tmp/styles.css')
-        .pipe(plugins.mqRemove({width: '64em', type: 'screen'}))
-        .pipe(plugins.rename({basename: 'ie'}))
-        .pipe(plugins.csso())
-        .pipe(gulp.dest(dirs.output + '/assets/css/dist'))
-        .pipe(plugins.size({title: 'ie styles'}));
-});
+gulp.task('css', function () {
 
-gulp.task('jekyll:build', function (done) {
-    return cp.spawn('jekyll', ['build', '--config=src/_config.yml'], {stdio: 'inherit'}).on('close', done);
-});
+  var PREFIX_BROWSERS = [
+    'last 2 versions',
+    'ie 9',
+    'Firefox ESR',
+    'Opera 12.1'
+  ];
 
-gulp.task('jekyll:rebuild', ['jekyll:build'], function () {
-    browserSync.reload();
+  return gulp.src('assets/css/index.css')
+    .pipe(plugins.cssnext([
+      {browsers: PREFIX_BROWSERS},
+      {compress: false},
+      {path: 'assets/css'}
+    ]))
+    .pipe(gulp.dest('assets/css/dist'))
+    .pipe(plugins.rename('all.css'))
+    .pipe(plugins.csso())
+    .pipe(gulp.dest('assets/css/dist'))
+    .pipe(plugins.size({title: 'css'}));
 });
 
 gulp.task('server', function() {
-    browserSync({
-        notify: false,
-        logPrefix: 'SERVER',
-        browser: 'google chrome canary',
-        server: [dirs.output]
-    });
 
-    // Watch Files for changes & do page reload
-    gulp.watch([
-        dirs.source + '/_config.yml',
-        dirs.source + '/_includes/*.html',
-        dirs.source + '/_layouts/*.html',
-        dirs.source + '/_posts/*',
-        dirs.source + '/*.{html,md}'
-    ],                                              ['jekyll:rebuild']);
-    gulp.watch([
-        dirs.source + '/assets/scss/*.scss',
-        dirs.source + '/assets/css/*.css',
-    ],                                              ['styles', reload]);
-    gulp.watch(dirs.source + '/assets/js/*.js',     ['lint:js', 'js', reload]);
-    gulp.watch(dirs.source + '/assets/images/**/*', ['images', reload]);
+  var src = '**/*.{html,php}';
+
+  browserSync.init(src, {
+    // proxy: "",                           // BrowserSync for a php server
+    server: ['./'],
+    notify: false,
+    browser: 'google chrome canary'
+  });
+
+  // Watch Files for changes & do page reload
+  gulp.watch('assets/css/*.css'    ['css', reload]);
+  gulp.watch('assets/js/*.js',     ['lint:js', 'js', reload]);
+  gulp.watch('assets/images/**/*', ['images', reload]);
 });
 
 // -----------------------------------------------------------------------------
 // | Main commands                                                             |
 // -----------------------------------------------------------------------------
 
-// Clean Output Directory
+// Clean
 gulp.task('clean', function (done) {
-    require('del')([
-        dirs.output,
-        '.tmp'
-    ], done);
+    require('del')(['assets/css/dist', 'assets/js/dist'], done);
 });
 
-// Launch local server
+// Build & Serve
 gulp.task('serve', function (done) {
-    runSequence(
-        'jekyll:build',
-        ['lint:js', 'styles', 'js', 'images'],
-        'server',
-    done);
+    runSequence(['lint:js', 'css', 'js', 'images'], 'server', done);
 });
 
-// Build Files
+// Build
 gulp.task('build', function (done) {
-    runSequence(
-        'clean', 'jekyll:build',
-        ['lint:js', 'styles', 'js', 'images'],
-    done);
+    runSequence('clean', ['lint:js', 'css', 'js', 'images'], done);
 });
 
 gulp.task('default', ['build']);
