@@ -92,7 +92,7 @@ gulp.task('server', function() {
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/css/*.css'    ['css', reload]);
+  gulp.watch('assets/css/*.css',   ['css', reload]);
   gulp.watch('assets/js/*.js',     ['lint:js', 'js', reload]);
   gulp.watch('assets/images/**/*', ['images', reload]);
 });
