@@ -1,13 +1,14 @@
 /**
- * SCAFFOLDR
+ * dploy
  *
  * Tasks
  *
- * 1. lint:js       # linting of all JS (excl plugin and vendor).
- * 2. js            # Concatenate & minify all JavaScript to `all.js`.
- * 3. images        # Optimize PNG, JPEG, GIF and SVG images.
- * 4. css           # Generate & prefix CSS using nextcss, minify to `all.css`.
- * 5. server        # BrowserSync server and watch all src files.
+ * 1. lint:js       # linting of all app Javascript (excl plugin and vendor).
+ * 2. js:libs       # Concatenate & minify all vendor Javascript to `libs.js`.
+ * 3. js:app        # Concatenate & minify all app Javascript to `app.js`.
+ * 4. images        # Optimize PNG, JPEG, GIF and SVG images.
+ * 5. css           # Generate & prefix CSS using nextcss, minify to `all.css`.
+ * 6. server        # BrowserSync server and watch all src files.
  *
  * Commands
  *
@@ -23,29 +24,31 @@ var reload      = browserSync.reload;
 var runSequence = require('run-sequence');
 
 gulp.task('lint:js', function () {
-  return gulp.src([
-
-      'assets/js/*.js',
-      '!assets/js/jquery*.js',              // Don't lint plugins
-      '!assets/js/*.min.js'                 // Don't lint minified JS
-
-  ]).pipe(reload({stream: true, once: true}))
+  return gulp.src('assets/js/app/*.js')
+    .pipe(reload({stream: true, once: true}))
     .pipe(plugins.jshint())
     .pipe(plugins.jshint.reporter('jshint-stylish'))
     .pipe(plugins.if(!browserSync.active, plugins.jshint.reporter('fail')));
 });
 
-gulp.task('js', function () {
+gulp.task('js:libs', function () {
   return gulp.src([
 
     //'bower_components/jquery/dist/jquery.js',
-    'assets/js/*.js',
-    '!/assets/js/*.min.js'                  // Dont't process minifed JS
+    'assets/js/libs/*.js'
 
-  ]).pipe(plugins.concat('all.js'))
+  ]).pipe(plugins.concat('libs.js'))
     .pipe(plugins.uglify())
-    .pipe(gulp.dest('assets/js/dist'))
-    .pipe(plugins.size({title: 'js'}));
+    .pipe(gulp.dest('assets/js'))
+    .pipe(plugins.size({gzip: true, showFiles: true, title:'minified libs js'}));
+});
+
+gulp.task('js:app', function () {
+  return gulp.src('assets/js/app/*.js')
+    .pipe(plugins.concat('app.js'))
+    .pipe(plugins.uglify())
+    .pipe(gulp.dest('assets/js'))
+    .pipe(plugins.size({gzip: true, showFiles: true, title:'minified app js'}));
 });
 
 gulp.task('images', function () {
@@ -55,7 +58,7 @@ gulp.task('images', function () {
       interlaced: true
     }))
     .pipe(gulp.dest('assets/images'))
-    .pipe(plugins.size({title: 'images'}));
+    .pipe(plugins.size({gzip: true, showFiles: true, title:'images'}));
 });
 
 gulp.task('css', function () {
@@ -67,17 +70,19 @@ gulp.task('css', function () {
     'Opera 12.1'
   ];
 
-  return gulp.src('assets/css/index.css')
+  return gulp.src('assets/cssNx/index.css')
     .pipe(plugins.cssnext([
       {browsers: PREFIX_BROWSERS},
       {compress: false},
-      {path: 'assets/css'}
+      {path: 'assets/cssNx'}
     ]))
-    .pipe(gulp.dest('assets/css/dist'))
-    .pipe(plugins.rename('all.css'))
+    .pipe(plugins.rename('styles.css'))
+    .pipe(gulp.dest('assets/css'))
+    .pipe(plugins.size({gzip: true, showFiles: true, title:'unminified css'}))
+    .pipe(plugins.rename('styles.min.css'))
     .pipe(plugins.csso())
-    .pipe(gulp.dest('assets/css/dist'))
-    .pipe(plugins.size({title: 'css'}));
+    .pipe(gulp.dest('assets/css'))
+    .pipe(plugins.size({gzip: true, showFiles: true, title:'minified css'}));
 });
 
 gulp.task('server', function() {
@@ -85,15 +90,16 @@ gulp.task('server', function() {
   var src = '**/*.{html,php}';
 
   browserSync.init(src, {
-    // proxy: "",                           // BrowserSync for a php server
-    server: ['./'],
+    browser: 'google chrome canary',
+    logConnections: true,
     notify: false,
-    browser: 'google chrome canary'
+    // proxy: "",                           // BrowserSync for a php server
+    server: ['./']
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/css/*.css',   ['css', reload]);
-  gulp.watch('assets/js/*.js',     ['lint:js', 'js', reload]);
+  gulp.watch('assets/cssNx/*.css', ['css', reload]);
+  gulp.watch('assets/js/*.js',     ['lint:js', 'js:app', reload]);
   gulp.watch('assets/images/**/*', ['images', reload]);
 });
 
@@ -103,17 +109,29 @@ gulp.task('server', function() {
 
 // Clean
 gulp.task('clean', function (done) {
-    require('del')(['assets/css/dist', 'assets/js/dist'], done);
+    require('del')([
+      'assets/css/styles.min.css',
+      'assets/css/styles.css',
+      'assets/js/libs.js',
+      'assets/js/app.js'
+    ], done);
 });
 
 // Build & Serve
 gulp.task('serve', function (done) {
-    runSequence(['lint:js', 'css', 'js', 'images'], 'server', done);
+    runSequence([
+      'css',
+      'lint:js', 'js:libs', 'js:app', 'images'],
+      'server',
+    done);
 });
 
 // Build
 gulp.task('build', function (done) {
-    runSequence('clean', ['lint:js', 'css', 'js', 'images'], done);
+    runSequence(
+      'css',
+      ['lint:js', 'js:libs', 'js:app', 'images'],
+    done);
 });
 
 gulp.task('default', ['build']);

@@ -1,6 +1,6 @@
-# SCAFFOLDR (WIP)
+# dploy (WIP)
 
-Scaffoldr is a set of tools that combine to form my workflow.
+dploy is a set of tools that combine to form my workflow.
 
 This workflow utilizes the following tools, all of which are independent themselves.
 
