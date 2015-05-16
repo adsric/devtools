@@ -3,18 +3,18 @@
  *
  * Tasks
  *
- * 1. lint:js       # linting of all app Javascript (excl plugin and vendor).
- * 2. js:libs       # Concatenate & minify all vendor Javascript to `libs.js`.
- * 3. js:app        # Concatenate & minify all app Javascript to `app.js`.
- * 4. images        # Optimize PNG, JPEG, GIF and SVG images.
- * 5. css           # Generate & prefix CSS using nextcss, minify to `all.css`.
- * 6. server        # BrowserSync server and watch all src files.
+ * 1. lint:js     # linting of all app Javascript (excl plugin and vendor).
+ * 2. js:libs     # Concatenate & minify all vendor Javascript to `libs.js`.
+ * 3. js:app      # Concatenate & minify all app Javascript to `app.js`.
+ * 4. images      # Optimize PNG, JPEG, GIF and SVG images.
+ * 5. css         # Generate & prefix CSS from SASS, minify to `styles.min.css`.
+ * 6. server      # BrowserSync server and watch all src files.
  *
  * Commands
  *
- * 1. clean         # Delete the output files.
- * 2. serve         # Build all assets and launch BrowserSync server.
- * 3. build         # Build all assets.
+ * 1. clean       # Delete the output files.
+ * 2. serve       # Build all assets and launch BrowserSync server.
+ * 3. build       # Build all assets.
  */
 
 var gulp        = require('gulp');
@@ -70,17 +70,17 @@ gulp.task('css', function () {
     'Opera 12.1'
   ];
 
-  return gulp.src('assets/cssNx/index.css')
-    .pipe(plugins.cssnext([
-      {browsers: PREFIX_BROWSERS},
-      {compress: false},
-      {path: 'assets/cssNx'}
-    ]))
+  return gulp.src('assets/scss/*.scss')
+    .pipe(plugins.changed('.tmp/styles', {extension: '.css'}))
+    .pipe(plugins.sass({
+      precision: 10,
+    }).on('error', plugins.sass.logError))
+    .pipe(plugins.autoprefixer(PREFIX_BROWSERS))
     .pipe(plugins.rename('styles.css'))
     .pipe(gulp.dest('assets/css'))
     .pipe(plugins.size({gzip: true, showFiles: true, title:'unminified css'}))
     .pipe(plugins.rename('styles.min.css'))
-    .pipe(plugins.csso())
+    .pipe(plugins.if('*.css', plugins.csso()))
     .pipe(gulp.dest('assets/css'))
     .pipe(plugins.size({gzip: true, showFiles: true, title:'minified css'}));
 });
@@ -98,7 +98,7 @@ gulp.task('server', function() {
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/cssNx/*.css', ['css', reload]);
+  gulp.watch('assets/scss/*.scss', ['css', reload]);
   gulp.watch('assets/js/*.js',     ['lint:js', 'js:app', reload]);
   gulp.watch('assets/images/**/*', ['images', reload]);
 });
