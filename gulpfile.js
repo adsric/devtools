@@ -64,7 +64,9 @@ gulp.task('images', function () {
 gulp.task('css', function () {
 
   var PREFIX_BROWSERS = [
+    '> 1%',
     'last 2 versions',
+    'Safari > 5',
     'ie 9',
     'Firefox ESR',
     'Opera 12.1'
