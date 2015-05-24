@@ -1,20 +1,18 @@
+/** dploy */
+
 /**
- * dploy
- *
  * Tasks
- *
- * 1. lint:js     # linting of all app Javascript (excl plugin and vendor).
- * 2. js:libs     # Concatenate & minify all vendor Javascript to `libs.js`.
- * 3. js:app      # Concatenate & minify all app Javascript to `app.js`.
- * 4. images      # Optimize PNG, JPEG, GIF and SVG images.
- * 5. css         # Generate & prefix CSS from SASS, minify to `styles.min.css`.
- * 6. server      # BrowserSync server and watch all src files.
+ * 1. lint:js     : linting of all app Javascript (excl plugin and vendor).
+ * 2. js:libs     : Concatenate & minify all vendor Javascript to `libs.js`.
+ * 3. js:app      : Concatenate & minify all app Javascript to `app.js`.
+ * 4. images      : Optimize PNG, JPEG, GIF and SVG images.
+ * 5. css         : Generate & prefix CSS from SASS, minify to `styles.min.css`.
+ * 6. server      : BrowserSync server and watch all src files.
  *
  * Commands
- *
- * 1. clean       # Delete the output files.
- * 2. serve       # Build all assets and launch BrowserSync server.
- * 3. build       # Build all assets.
+ * 1. clean       : Delete the output files.
+ * 2. serve       : Build all assets and launch BrowserSync server.
+ * 3. build       : Build all assets.
  */
 
 var gulp        = require('gulp');
