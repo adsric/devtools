@@ -2,12 +2,11 @@
 
 /**
  * Tasks
- * 1. lint:js     : linting of all app Javascript (excl plugin and vendor).
- * 2. js:libs     : Concatenate & minify all vendor Javascript to `libs.js`.
- * 3. js:app      : Concatenate & minify all app Javascript to `app.js`.
- * 4. images      : Optimize PNG, JPEG, GIF and SVG images.
- * 5. css         : Generate & prefix CSS from SASS, minify to `styles.min.css`.
- * 6. server      : BrowserSync server and watch all src files.
+ * 1. js:libs     : Concatenate & minify all vendor Javascript to `libs.js`.
+ * 2. js:app      : Concatenate & minify all app Javascript to `app.js`.
+ * 3. images      : Optimize PNG, JPEG, GIF and SVG images.
+ * 4. scss        : Generate & prefix CSS from SASS, minify to `styles.min.css`.
+ * 5. server      : BrowserSync server and watch all src files.
  *
  * Commands
  * 1. clean       : Delete the output files.
@@ -20,14 +19,6 @@ var plugins     = require('gulp-load-plugins')();
 var browserSync = require('browser-sync');
 var reload      = browserSync.reload;
 var runSequence = require('run-sequence');
-
-gulp.task('lint:js', function () {
-  return gulp.src('assets/js/app/*.js')
-    .pipe(reload({stream: true, once: true}))
-    .pipe(plugins.jshint())
-    .pipe(plugins.jshint.reporter('jshint-stylish'))
-    .pipe(plugins.if(!browserSync.active, plugins.jshint.reporter('fail')));
-});
 
 gulp.task('js:libs', function () {
   return gulp.src([
@@ -59,7 +50,7 @@ gulp.task('images', function () {
     .pipe(plugins.size({gzip: true, showFiles: true, title:'images'}));
 });
 
-gulp.task('css', function () {
+gulp.task('scss', function () {
 
   var PREFIX_BROWSERS = [
     '> 1%',
@@ -98,9 +89,9 @@ gulp.task('server', function() {
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/scss/*.scss',  ['css', reload]);
+  gulp.watch('assets/scss/*.scss',  ['scss', reload]);
   gulp.watch('assets/js/libs/*.js', ['js:libs', reload]);
-  gulp.watch('assets/js/app/*.js',  ['lint:js', 'js:app', reload]);
+  gulp.watch('assets/js/app/*.js',  ['js:app', reload]);
   gulp.watch('assets/images/**/*',  ['images', reload]);
 });
 
@@ -110,29 +101,29 @@ gulp.task('server', function() {
 
 // Clean
 gulp.task('clean', function (done) {
-    require('del')([
-      'assets/css/styles.min.css',
-      'assets/css/styles.css',
-      'assets/js/libs.js',
-      'assets/js/app.js'
-    ], done);
+  require('del')([
+    'assets/css/styles.min.css',
+    'assets/css/styles.css',
+    'assets/js/libs.js',
+    'assets/js/app.js'
+  ], done);
 });
 
 // Build & Serve
 gulp.task('serve', function (done) {
-    runSequence([
-      'css',
-      'lint:js', 'js:libs', 'js:app', 'images'],
-      'server',
-    done);
+  runSequence(
+    'scss',
+    ['js:libs', 'js:app', 'images'],
+    'server',
+  done);
 });
 
 // Build
 gulp.task('build', function (done) {
-    runSequence(
-      'css',
-      ['lint:js', 'js:libs', 'js:app', 'images'],
-    done);
+  runSequence(
+    'scss',
+    ['js:libs', 'js:app', 'images'],
+  done);
 });
 
 gulp.task('default', ['build']);
