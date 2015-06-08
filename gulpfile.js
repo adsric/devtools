@@ -61,7 +61,7 @@ gulp.task('scss', function () {
     'Opera 12.1'
   ];
 
-  return gulp.src('assets/scss/*.scss')
+  return gulp.src('assets/scss/**/*.scss')
     .pipe(plugins.changed('.tmp/styles', {extension: '.css'}))
     .pipe(plugins.sass({
       precision: 10,
