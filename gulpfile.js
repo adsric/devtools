@@ -85,10 +85,10 @@ gulp.task('server', function() {
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/scss/*.scss',  ['scss', reload]);
-  gulp.watch('assets/js/libs/*.js', ['js:libs', reload]);
-  gulp.watch('assets/js/app/*.js',  ['js:main', reload]);
-  gulp.watch('assets/images/**/*',  ['images', reload]);
+  gulp.watch('assets/scss/**/*.scss', ['scss', reload]);
+  gulp.watch('assets/js/libs/*.js',   ['js:libs', reload]);
+  gulp.watch('assets/js/*.js',    ['js:main', reload]);
+  gulp.watch('assets/images/**/*',    ['images', reload]);
 });
 
 // -----------------------------------------------------------------------------
