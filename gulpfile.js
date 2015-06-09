@@ -2,10 +2,10 @@
 
 /**
  * Tasks
- * 1. js:libs     : Concatenate & minify all vendor Javascript to `libs.js`.
- * 2. js:main     : Concatenate & minify all Javascript to `scripts.js`.
+ * 1. js:libs     : Concatenate & minify all vendor Javascript, to `libs.js`.
+ * 2. js:main     : Concatenate & minify all Javascript, to `scripts.js`.
  * 3. images      : Optimize PNG, JPEG, GIF and SVG images.
- * 4. scss        : Generate & prefix CSS from SASS, minify to `main.css`.
+ * 4. css         : Translates and prefix's CSS to `main.css`.
  * 5. server      : BrowserSync server and watch all src files.
  *
  * Commands
@@ -16,14 +16,21 @@
 
 var gulp        = require('gulp');
 var plugins     = require('gulp-load-plugins')();
+var cssnext     = require('gulp-cssnext');
 var browserSync = require('browser-sync');
 var reload      = browserSync.reload;
 var runSequence = require('run-sequence');
 
+// Errorhandler
+function streamError(err) {
+  gutil.beep();
+  gutil.log(err instanceof gutil.PluginError ? err.toString() : err.stack);
+}
+
 gulp.task('js:libs', function () {
   return gulp.src([
-    //'bower_components/jquery/dist/jquery.js',
-    'assets/js/libs/*.js'
+      //'bower_components/jquery/dist/jquery.js',
+      'assets/js/libs/*.js'
   ]).pipe(plugins.concat('libs.js'))
     .pipe(plugins.uglify())
     .pipe(gulp.dest('assets/js'))
@@ -32,8 +39,8 @@ gulp.task('js:libs', function () {
 
 gulp.task('js:main', function () {
   return gulp.src([
-    'assets/js/*.js',
-    '!assets/js/scripts.js',
+      'assets/js/*.js',
+      '!assets/js/scripts.js',
   ]).pipe(plugins.concat('scripts.js'))
     .pipe(plugins.uglify())
     .pipe(gulp.dest('assets/js'))
@@ -50,24 +57,17 @@ gulp.task('images', function () {
     .pipe(plugins.size({gzip: true, showFiles: true, title:'images'}));
 });
 
-gulp.task('scss', function () {
-
-  var PREFIX_BROWSERS = [
-    '> 1%',
-    'last 2 versions',
-    'Safari > 5',
-    'ie 9',
-    'Firefox ESR',
-    'Opera 12.1'
-  ];
-
-  return gulp.src('assets/scss/**/*.scss')
-    .pipe(plugins.changed('.tmp/styles', {extension: '.css'}))
-    .pipe(plugins.sass({
-      precision: 10,
-    }).on('error', plugins.sass.logError))
-    .pipe(plugins.autoprefixer(PREFIX_BROWSERS))
-    .pipe(plugins.if('*.css', plugins.csso()))
+gulp.task('css', function() {
+  return gulp.src([
+      'assets/css/index.css',
+      '!assets/css/main.css'
+  ]).pipe(plugins.plumber({errorHandler: streamError}))
+    .pipe(cssnext({
+      browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
+      compress: true,
+      url: false
+    }))
+    .pipe(plugins.rename('main.css'))
     .pipe(gulp.dest('assets/css'))
     .pipe(plugins.size({gzip: true, showFiles: true, title:'minified css'}));
 });
@@ -85,10 +85,10 @@ gulp.task('server', function() {
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/scss/**/*.scss', ['scss', reload]);
-  gulp.watch('assets/js/libs/*.js',   ['js:libs', reload]);
-  gulp.watch('assets/js/*.js',    ['js:main', reload]);
-  gulp.watch('assets/images/**/*',    ['images', reload]);
+  gulp.watch('assets/css/**/*.css', ['css', reload]);
+  gulp.watch('assets/js/libs/*.js', ['js:libs', reload]);
+  gulp.watch('assets/js/*.js',      ['js:main', reload]);
+  gulp.watch('assets/images/**/*',  ['images', reload]);
 });
 
 // -----------------------------------------------------------------------------
@@ -98,7 +98,6 @@ gulp.task('server', function() {
 // Clean
 gulp.task('clean', function (done) {
   require('del')([
-    'assets/css/main.min.css',
     'assets/css/main.css',
     'assets/js/libs.js',
     'assets/js/scripts.js'
@@ -108,7 +107,7 @@ gulp.task('clean', function (done) {
 // Build & Serve
 gulp.task('serve', function (done) {
   runSequence(
-    'scss',
+    'css',
     ['js:libs', 'js:main', 'images'],
     'server',
   done);
@@ -117,7 +116,7 @@ gulp.task('serve', function (done) {
 // Build
 gulp.task('build', function (done) {
   runSequence(
-    'scss',
+    'css',
     ['js:libs', 'js:main', 'images'],
   done);
 });
