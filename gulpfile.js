@@ -23,8 +23,8 @@ var runSequence = require('run-sequence');
 
 // Errorhandler
 function streamError(err) {
-  gutil.beep();
-  gutil.log(err instanceof gutil.PluginError ? err.toString() : err.stack);
+  plugins.util.beep();
+  plugins.util.log(err instanceof plugins.util.PluginError ? err.toString() : err.stack);
 }
 
 gulp.task('js:libs', function () {
@@ -64,10 +64,10 @@ gulp.task('css', function() {
   ]).pipe(plugins.plumber({errorHandler: streamError}))
     .pipe(cssnext({
       browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
-      compress: true,
       url: false
     }))
     .pipe(plugins.rename('main.css'))
+    .pipe(plugins.if('*.css', plugins.csso()))
     .pipe(gulp.dest('assets/css'))
     .pipe(plugins.size({gzip: true, showFiles: true, title:'minified css'}));
 });

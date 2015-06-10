@@ -7,6 +7,7 @@
     "gulp-cssnext": "^1.0.1",
     "gulp-changed": "^1.2.1",
     "gulp-concat": "^2.5.2",
+    "gulp-csso": "^1.0.0",
     "gulp-if": "^1.2.5",
     "gulp-imagemin": "^2.2.1",
     "gulp-load-plugins": "^0.10.0",
@@ -14,6 +15,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-size": "^1.2.1",
     "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.5",
     "run-sequence": "^1.1.0"
   },
   "engines": {
