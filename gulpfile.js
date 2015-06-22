@@ -14,65 +14,77 @@
  * 3. build       : Build all assets.
  */
 
+var path        = require('path');
 var gulp        = require('gulp');
-var plugins     = require('gulp-load-plugins')();
 var cssnext     = require('gulp-cssnext');
 var browserSync = require('browser-sync');
-var reload      = browserSync.reload;
 var runSequence = require('run-sequence');
 
+var $ = require('gulp-load-plugins')();
+var reload = browserSync.reload;
+
+// The output directory for all the built files.
+const DEST = './build';
+
 // Errorhandler
-function streamError(err) {
-  plugins.util.beep();
-  plugins.util.log(err instanceof plugins.util.PluginError ? err.toString() : err.stack);
+function streamError (err) {
+  $.util.beep();
+  $.util.log(err instanceof $.util.PluginError ? err.toString() : err.stack);
 }
 
-gulp.task('js:libs', function () {
+gulp.task('js:lib', function () {
   return gulp.src([
       //'bower_components/jquery/dist/jquery.js',
-      'assets/js/libs/*.js'
-  ]).pipe(plugins.concat('libs.js'))
-    .pipe(plugins.uglify())
-    .pipe(gulp.dest('assets/js'))
-    .pipe(plugins.size({gzip: true, showFiles: true, title:'minified libs js'}));
+      './a/j/lib/*.js'
+  ]).pipe($.concat('lib.js'))
+    .pipe($.uglify())
+    .pipe(gulp.dest(path.join(DEST, 'a/j')))
+    .pipe($.size({gzip: true, showFiles: true, title:'minified lib js'}));
 });
 
 gulp.task('js:main', function () {
   return gulp.src([
-      'assets/js/*.js',
-      '!assets/js/scripts.js',
-  ]).pipe(plugins.concat('scripts.js'))
-    .pipe(plugins.uglify())
-    .pipe(gulp.dest('assets/js'))
-    .pipe(plugins.size({gzip: true, showFiles: true, title:'minified app js'}));
+      './a/j/*.js',
+      '!./a/j/main.min.js',
+  ]).pipe($.concat('main.min.js'))
+    .pipe($.uglify())
+    .pipe(gulp.dest(path.join(DEST, 'a/j')))
+    .pipe($.size({gzip: true, showFiles: true, title:'minified main js'}));
 });
 
 gulp.task('images', function () {
-  return gulp.src('assets/images/**/*')
-    .pipe(plugins.imagemin({
+  return gulp.src(['./a/i/**/*'])
+    .pipe($.imagemin({
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest('assets/images'))
-    .pipe(plugins.size({gzip: true, showFiles: true, title:'images'}));
+    .pipe(gulp.dest(path.join(DEST, 'a/i')))
+    .pipe($.size({gzip: true, showFiles: true, title:'images'}));
 });
 
-gulp.task('css', function() {
+gulp.task('fonts', function () {
+  return gulp.src(['./a/f/**'])
+    .pipe(gulp.dest(path.join(DEST, 'a/f')))
+    .pipe($.size({showFiles: true, title: 'fonts'}));
+});
+
+gulp.task('css', function () {
   return gulp.src([
-      'assets/css/index.css',
-      '!assets/css/main.css'
-  ]).pipe(plugins.plumber({errorHandler: streamError}))
+      './a/c/index.css',
+      '!./a/c/main.css',
+      '!./a/c/main.min.css'
+  ]).pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
       browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
       url: false
     }))
-    .pipe(plugins.rename('main.css'))
-    .pipe(plugins.if('*.css', plugins.csso()))
-    .pipe(gulp.dest('assets/css'))
-    .pipe(plugins.size({gzip: true, showFiles: true, title:'minified css'}));
+    .pipe($.rename('main.min.css'))
+    .pipe($.if('*.css', $.minifyCss()))
+    .pipe(gulp.dest(path.join(DEST, 'a/c')))
+    .pipe($.size({gzip: true, showFiles: true, title:'minified css'}));
 });
 
-gulp.task('server', function() {
+gulp.task('server', function () {
 
   var src = '**/*.{html,php}';
 
@@ -81,14 +93,14 @@ gulp.task('server', function() {
     logConnections: true,
     notify: false,
     // proxy: "",                           // BrowserSync for a php server
-    server: ['./']
+    server: [DEST]
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch('assets/css/**/*.css', ['css', reload]);
-  gulp.watch('assets/js/libs/*.js', ['js:libs', reload]);
-  gulp.watch('assets/js/*.js',      ['js:main', reload]);
-  gulp.watch('assets/images/**/*',  ['images', reload]);
+  gulp.watch(['./a/c/**/*.css'], ['css', reload]);
+  gulp.watch(['./a/j/lib/*.js'], ['js:lib', reload]);
+  gulp.watch(['./a/j/*.js'], ['js:main', reload]);
+  gulp.watch(['./a/i/**/*'], ['images', reload]);
 });
 
 // -----------------------------------------------------------------------------
@@ -98,9 +110,11 @@ gulp.task('server', function() {
 // Clean
 gulp.task('clean', function (done) {
   require('del')([
-    'assets/css/main.css',
-    'assets/js/libs.js',
-    'assets/js/scripts.js'
+    DEST,
+    './a/j/lib.js',
+    './a/j/main.min.js',
+    './a/c/main.css',
+    './a/c/main.min.css'
   ], done);
 });
 
@@ -108,7 +122,7 @@ gulp.task('clean', function (done) {
 gulp.task('serve', function (done) {
   runSequence(
     'css',
-    ['js:libs', 'js:main', 'images'],
+    ['js:lib', 'js:main', 'images', 'fonts'],
     'server',
   done);
 });
@@ -117,7 +131,7 @@ gulp.task('serve', function (done) {
 gulp.task('build', function (done) {
   runSequence(
     'css',
-    ['js:libs', 'js:main', 'images'],
+    ['js:lib', 'js:main', 'images', 'fonts'],
   done);
 });
 
