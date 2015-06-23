@@ -62,6 +62,15 @@ gulp.task('images', function () {
     .pipe($.size({gzip: true, showFiles: true, title:'images'}));
 });
 
+gulp.task('copy', function () {
+  return gulp.src([
+    'node_modules/apache-server-configs/dist/.htaccess'
+  ], {
+    dot: true
+  }).pipe(gulp.dest(DEST))
+    .pipe($.size({title: 'copy'}));
+});
+
 gulp.task('fonts', function () {
   return gulp.src(['./a/f/**'])
     .pipe(gulp.dest(path.join(DEST, 'a/f')))
@@ -122,7 +131,7 @@ gulp.task('clean', function (done) {
 gulp.task('serve', function (done) {
   runSequence(
     'css',
-    ['js:lib', 'js:main', 'images', 'fonts'],
+    ['js:lib', 'js:main', 'images', 'copy', 'fonts'],
     'server',
   done);
 });
@@ -131,7 +140,7 @@ gulp.task('serve', function (done) {
 gulp.task('build', function (done) {
   runSequence(
     'css',
-    ['js:lib', 'js:main', 'images', 'fonts'],
+    ['js:lib', 'js:main', 'images', 'copy', 'fonts'],
   done);
 });
 
