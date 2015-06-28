@@ -1,6 +1,6 @@
-# dploy (WIP)
+# assembly (WIP)
 
-dploy is a set of tools that combine to form my workflow.
+assembly is a set of tools that combine to form my workflow.
 
 This workflow utilizes the following tools, all of which are independent themselves.
 

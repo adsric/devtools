@@ -1,11 +1,11 @@
-/** dploy */
+/** assembly */
 
 /**
  * Tasks
- * 1. js:libs     : Concatenate & minify all vendor Javascript, to `libs.js`.
- * 2. js:main     : Concatenate & minify all Javascript, to `scripts.js`.
+ * 1. js:libs     : Concatenate & minify all vendor Javascript, to `lib.js`.
+ * 2. js:main     : Concatenate & minify all Javascript, to `main.min.js`.
  * 3. images      : Optimize PNG, JPEG, GIF and SVG images.
- * 4. css         : Translates and prefix's CSS to `main.css`.
+ * 4. css         : Translates and prefix's CSS to `main.min.css`.
  * 5. server      : BrowserSync server and watch all src files.
  *
  * Commands
