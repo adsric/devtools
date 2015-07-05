@@ -14,17 +14,24 @@
  * 3. build       : Build all assets.
  */
 
+var fs          = require('fs');
 var path        = require('path');
+var spawn       = require('child_process').spawn;
+
 var gulp        = require('gulp');
 var cssnext     = require('gulp-cssnext');
+var Grunticon   = require('grunticon-lib');
 var browserSync = require('browser-sync');
 var runSequence = require('run-sequence');
 
 var $ = require('gulp-load-plugins')();
 var reload = browserSync.reload;
 
+// The source directory for all the pre-built files.
+var SRC = '.';
+
 // The output directory for all the built files.
-const DEST = './build';
+var DEST = './build';
 
 // Errorhandler
 function streamError (err) {
@@ -34,32 +41,49 @@ function streamError (err) {
 
 gulp.task('js:lib', function () {
   return gulp.src([
-      //'bower_components/jquery/dist/jquery.js',
-      './a/j/lib/*.js'
+    //'bower_components/jquery/dist/jquery.js',
   ]).pipe($.concat('lib.js'))
     .pipe($.uglify())
     .pipe(gulp.dest(path.join(DEST, 'a/j')))
-    .pipe($.size({gzip: true, showFiles: true, title:'minified lib js'}));
+    .pipe($.size({gzip: true, showFiles: true, title:'lib scripts'}));
 });
 
 gulp.task('js:main', function () {
   return gulp.src([
-      './a/j/*.js',
-      '!./a/j/main.min.js',
+    SRC + '/a/j/*.js',
+    '!' + SRC + '/a/j/main.min.js',
   ]).pipe($.concat('main.min.js'))
     .pipe($.uglify())
     .pipe(gulp.dest(path.join(DEST, 'a/j')))
-    .pipe($.size({gzip: true, showFiles: true, title:'minified main js'}));
+    .pipe($.size({gzip: true, showFiles: true, title:'site scripts'}));
 });
 
 gulp.task('images', function () {
-  return gulp.src(['./a/i/**/*'])
+  return gulp.src([SRC + '/a/i/**/*'])
     .pipe($.imagemin({
       progressive: true,
       interlaced: true
     }))
     .pipe(gulp.dest(path.join(DEST, 'a/i')))
-    .pipe($.size({gzip: true, showFiles: true, title:'images'}));
+    .pipe($.size({gzip: true, showFiles: false, title:'images'}));
+});
+
+gulp.task('icons', function () {
+  var deferred = q.defer();
+  var iconDir  = SRC + '/a/icons/';
+  var options  = { enhanceSVG: true };
+
+  var files = fs.readdirSync(iconDir).map(function (fileName) {
+    return path.join(iconDir, fileName);
+  });
+
+  var grunticon = new Grunticon(files, DEST + '/a/icons', options);
+
+  grunticon.process(function () {
+    deferred.resolve();
+  });
+
+  return deferred.promise;
 });
 
 gulp.task('copy', function () {
@@ -72,16 +96,16 @@ gulp.task('copy', function () {
 });
 
 gulp.task('fonts', function () {
-  return gulp.src(['./a/f/**'])
+  return gulp.src([SRC + '/a/f/**/*'])
     .pipe(gulp.dest(path.join(DEST, 'a/f')))
     .pipe($.size({showFiles: true, title: 'fonts'}));
 });
 
 gulp.task('css', function () {
   return gulp.src([
-      './a/c/index.css',
-      '!./a/c/main.css',
-      '!./a/c/main.min.css'
+      SRC + '/a/c/index.css',
+      '!' + SRC + '/a/c/main.css',
+      '!' + SRC + '/a/c/main.min.css'
   ]).pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
       browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
@@ -90,10 +114,10 @@ gulp.task('css', function () {
     .pipe($.rename('main.min.css'))
     .pipe($.if('*.css', $.minifyCss()))
     .pipe(gulp.dest(path.join(DEST, 'a/c')))
-    .pipe($.size({gzip: true, showFiles: true, title:'minified css'}));
+    .pipe($.size({gzip: true, showFiles: true, title:'styles'}));
 });
 
-gulp.task('server', function () {
+gulp.task('serve', ['build'], function (done) {
 
   var src = '**/*.{html,php}';
 
@@ -101,46 +125,52 @@ gulp.task('server', function () {
     browser: 'google chrome canary',
     logConnections: true,
     notify: false,
-    // proxy: "",                           // BrowserSync for a php server
+    // proxy: "", // BrowserSync for a php server
     server: [DEST]
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch(['./a/c/**/*.css'], ['css', reload]);
-  gulp.watch(['./a/j/lib/*.js'], ['js:lib', reload]);
-  gulp.watch(['./a/j/*.js'], ['js:main', reload]);
-  gulp.watch(['./a/i/**/*'], ['images', reload]);
+  gulp.watch([SRC + '/a/c/**/*.css'], ['css', reload]);
+  gulp.watch([SRC + '/a/j/*.js'], ['js:main', reload]);
+  gulp.watch([SRC + '/a/i/**/*'], ['images', reload]);
+  gulp.watch([SRC + '/a/icons/*'], ['icons', reload]);
 });
 
 // -----------------------------------------------------------------------------
-// | Main commands                                                             |
+// | Setup tasks                                                               |
 // -----------------------------------------------------------------------------
+
+// Install/update bower components
+gulp.task('bower', function (cb) {
+  var proc = spawn('./node_modules/bower/bin/bower', ['install'], {cwd: SRC + '/', stdio: 'inherit'});
+  proc.on('close', cb);
+});
+
+// Set up
+gulp.task('setup', function (cb) {
+  runSequence(['bower'], cb);
+});
 
 // Clean
 gulp.task('clean', function (done) {
   require('del')([
-    DEST,
-    './a/j/lib.js',
-    './a/j/main.min.js',
-    './a/c/main.css',
-    './a/c/main.min.css'
+    SRC + '/a/j/lib.js',
+    SRC + '/a/j/main.min.js',
+    SRC + '/a/c/main.css',
+    SRC + '/a/c/main.min.css',
+    DEST
   ], done);
 });
 
-// Build & Serve
-gulp.task('serve', function (done) {
-  runSequence(
-    'css',
-    ['js:lib', 'js:main', 'images', 'copy', 'fonts'],
-    'server',
-  done);
-});
+// -----------------------------------------------------------------------------
+// | Build tasks                                                               |
+// -----------------------------------------------------------------------------
 
 // Build
 gulp.task('build', function (done) {
   runSequence(
     'css',
-    ['js:lib', 'js:main', 'images', 'copy', 'fonts'],
+    ['js:lib', 'js:main', 'images', 'icons', 'copy', 'fonts'],
   done);
 });
 
