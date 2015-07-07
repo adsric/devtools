@@ -22,7 +22,7 @@ var q           = require('q');
 var gulp        = require('gulp');
 var cssnext     = require('gulp-cssnext');
 var Grunticon   = require('grunticon-lib');
-var browserSync = require('browser-sync');
+var browserSync = require('browser-sync').create();
 var runSequence = require('run-sequence');
 
 var $ = require('gulp-load-plugins')();
@@ -115,26 +115,24 @@ gulp.task('css', function () {
     .pipe($.rename('main.min.css'))
     .pipe($.if('*.css', $.minifyCss()))
     .pipe(gulp.dest(path.join(DEST, 'a/c')))
-    .pipe($.size({gzip: true, showFiles: true, title:'styles'}));
+    .pipe($.size({gzip: true, showFiles: true, title:'styles'}))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('serve', ['build'], function (done) {
 
-  var src = '**/*.{html,php}';
-
-  browserSync.init(src, {
+  browserSync.init({
     browser: 'google chrome canary',
-    logConnections: true,
     notify: false,
-    // proxy: "", // BrowserSync for a php server
-    server: [DEST]
+    // proxy: '', // BrowserSync for a php server
+    server: DEST
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch([SRC + '/a/c/**/*.css'], ['css', reload]);
-  gulp.watch([SRC + '/a/j/*.js'], ['js:main', reload]);
-  gulp.watch([SRC + '/a/i/**/*'], ['images', reload]);
-  gulp.watch([SRC + '/a/icons/*'], ['icons', reload]);
+  gulp.watch([SRC + '/a/c/**/*.css'], ['css'], reload);
+  gulp.watch([SRC + '/a/j/*.js'], ['js:main'], reload);
+  gulp.watch([SRC + '/a/i/**/*'], ['images'], reload);
+  gulp.watch([SRC + '/a/icons/*'], ['icons'], reload);
 });
 
 // -----------------------------------------------------------------------------
