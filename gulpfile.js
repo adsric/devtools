@@ -140,7 +140,7 @@ gulp.task('serve', ['build'], function (done) {
 // | Setup tasks                                                               |
 // -----------------------------------------------------------------------------
 
-// Install/update bower components
+// Install/Update bower components
 gulp.task('bower', function (cb) {
   var proc = spawn('./node_modules/bower/bin/bower', ['install'], {cwd: SRC + '/', stdio: 'inherit'});
   proc.on('close', cb);
@@ -151,7 +151,7 @@ gulp.task('setup', function (cb) {
   runSequence(['bower'], cb);
 });
 
-// Clean
+// Clean up
 gulp.task('clean', function (done) {
   require('del')([
     SRC + '/a/j/lib.js',
