@@ -1,19 +1,5 @@
 /** assembly */
 
-/**
- * Tasks
- * 1. js:libs     : Concatenate & minify all vendor Javascript, to `lib.js`.
- * 2. js:main     : Concatenate & minify all Javascript, to `main.min.js`.
- * 3. images      : Optimize PNG, JPEG, GIF and SVG images.
- * 4. css         : Translates and prefix's CSS to `main.min.css`.
- * 5. server      : BrowserSync server and watch all src files.
- *
- * Commands
- * 1. clean       : Delete the output files.
- * 2. serve       : Build all assets and launch BrowserSync server.
- * 3. build       : Build all assets.
- */
-
 var fs          = require('fs');
 var path        = require('path');
 var spawn       = require('child_process').spawn;
@@ -29,7 +15,7 @@ var $ = require('gulp-load-plugins')();
 var reload = browserSync.reload;
 
 // The source directory for all the pre-built files.
-var SRC = '.';
+var SRC = './a';
 
 // The output directory for all the built files.
 var DEST = './build';
@@ -45,40 +31,40 @@ gulp.task('js:lib', function () {
     //'bower_components/jquery/dist/jquery.js',
   ]).pipe($.concat('lib.js'))
     .pipe($.uglify())
-    .pipe(gulp.dest(path.join(DEST, 'a/j')))
+    .pipe(gulp.dest(path.join(DEST, 'j')))
     .pipe($.size({gzip: true, showFiles: true, title:'lib scripts'}));
 });
 
 gulp.task('js:main', function () {
   return gulp.src([
-    SRC + '/a/j/*.js',
-    '!' + SRC + '/a/j/main.min.js',
+    SRC + '/j/*.js',
+    '!' + SRC + '/j/main.min.js',
   ]).pipe($.concat('main.min.js'))
     .pipe($.uglify())
-    .pipe(gulp.dest(path.join(DEST, 'a/j')))
+    .pipe(gulp.dest(path.join(DEST, 'j')))
     .pipe($.size({gzip: true, showFiles: true, title:'site scripts'}));
 });
 
 gulp.task('images', function () {
-  return gulp.src([SRC + '/a/i/**/*'])
+  return gulp.src([SRC + '/i/**/*'])
     .pipe($.imagemin({
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest(path.join(DEST, 'a/i')))
+    .pipe(gulp.dest(path.join(DEST, 'i')))
     .pipe($.size({gzip: true, showFiles: false, title:'images'}));
 });
 
 gulp.task('icons', function () {
   var deferred = q.defer();
-  var iconDir  = SRC + '/a/icons/';
+  var iconDir  = SRC + '/icons/';
   var options  = { enhanceSVG: true };
 
   var files = fs.readdirSync(iconDir).map(function (fileName) {
     return path.join(iconDir, fileName);
   });
 
-  var grunticon = new Grunticon(files, DEST + '/a/icons', options);
+  var grunticon = new Grunticon(files, DEST + 'icons', options);
 
   grunticon.process(function () {
     deferred.resolve();
@@ -97,24 +83,26 @@ gulp.task('copy', function () {
 });
 
 gulp.task('fonts', function () {
-  return gulp.src([SRC + '/a/f/**/*'])
-    .pipe(gulp.dest(path.join(DEST, 'a/f')))
+  return gulp.src([SRC + '/f/**/*'])
+    .pipe(gulp.dest(path.join(DEST, 'f')))
     .pipe($.size({showFiles: true, title: 'fonts'}));
 });
 
 gulp.task('css', function () {
   return gulp.src([
-      SRC + '/a/c/index.css',
-      '!' + SRC + '/a/c/main.css',
-      '!' + SRC + '/a/c/main.min.css'
+      SRC + '/c/index.css',
+      '!' + SRC + '/c/main.css',
+      '!' + SRC + '/c/main.min.css'
   ]).pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
       browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
       url: false
     }))
+    .pipe($.rename('main.css'))
+    .pipe(gulp.dest(path.join(DEST, 'c')))
     .pipe($.rename('main.min.css'))
     .pipe($.if('*.css', $.minifyCss()))
-    .pipe(gulp.dest(path.join(DEST, 'a/c')))
+    .pipe(gulp.dest(path.join(DEST, 'c')))
     .pipe($.size({gzip: true, showFiles: true, title:'styles'}))
     .pipe(browserSync.stream());
 });
@@ -129,10 +117,10 @@ gulp.task('serve', ['build'], function (done) {
   });
 
   // Watch Files for changes & do page reload
-  gulp.watch([SRC + '/a/c/**/*.css'], ['css'], reload);
-  gulp.watch([SRC + '/a/j/*.js'], ['js:main'], reload);
-  gulp.watch([SRC + '/a/i/**/*'], ['images'], reload);
-  gulp.watch([SRC + '/a/icons/*'], ['icons'], reload);
+  gulp.watch([SRC + '/c/**/*.css'], ['css'], reload);
+  gulp.watch([SRC + '/j/*.js'], ['js:main'], reload);
+  gulp.watch([SRC + '/i/**/*'], ['images'], reload);
+  gulp.watch([SRC + '/icons/*'], ['icons'], reload);
 });
 
 // -----------------------------------------------------------------------------
@@ -141,7 +129,7 @@ gulp.task('serve', ['build'], function (done) {
 
 // Install/Update bower components
 gulp.task('bower', function (cb) {
-  var proc = spawn('./node_modules/bower/bin/bower', ['install'], {cwd: SRC + '/', stdio: 'inherit'});
+  var proc = spawn('./node_modules/bower/bin/bower', ['install'], {cwd: './', stdio: 'inherit'});
   proc.on('close', cb);
 });
 
@@ -153,10 +141,10 @@ gulp.task('setup', function (cb) {
 // Clean up
 gulp.task('clean', function (done) {
   require('del')([
-    SRC + '/a/j/lib.js',
-    SRC + '/a/j/main.min.js',
-    SRC + '/a/c/main.css',
-    SRC + '/a/c/main.min.css',
+    SRC + '/j/lib.js',
+    SRC + '/j/main.min.js',
+    SRC + '/c/main.css',
+    SRC + '/c/main.min.css',
     DEST
   ], done);
 });
