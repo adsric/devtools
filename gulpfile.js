@@ -100,6 +100,7 @@ gulp.task('css', function () {
     }))
     .pipe($.rename('main.css'))
     .pipe(gulp.dest(path.join(DEST, 'c')))
+    .pipe($.size({showFiles: true, title:'styles'}))
     .pipe($.rename('main.min.css'))
     .pipe($.if('*.css', $.minifyCss()))
     .pipe(gulp.dest(path.join(DEST, 'c')))
