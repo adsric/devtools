@@ -64,7 +64,7 @@ gulp.task('icons', function () {
     return path.join(iconDir, fileName);
   });
 
-  var grunticon = new Grunticon(files, DEST + 'icons', options);
+  var grunticon = new Grunticon(files, DEST + '/icons', options);
 
   grunticon.process(function () {
     deferred.resolve();
