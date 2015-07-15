@@ -54,7 +54,7 @@ gulp.task('images', function () {
 
 gulp.task('icons', function () {
   var deferred = q.defer();
-  var iconDIR  = rootDIR + '/icons/';
+  var iconDIR  = rootDIR + assetDIR + '/icons/';
   var options  = { enhanceSVG: true };
 
   var files = fs.readdirSync(iconDIR).map(function (fileName) {
