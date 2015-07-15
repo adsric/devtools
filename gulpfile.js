@@ -14,11 +14,9 @@ var runSequence = require('run-sequence');
 var $ = require('gulp-load-plugins')();
 var reload = browserSync.reload;
 
-// The source directory for all the pre-built files.
-var SRC = './a';
-
-// The output directory for all the built files.
-var DEST = './build';
+var rootDIR  = './';
+var assetDIR = '/a'
+var distDIR  = './';
 
 // Errorhandler
 function streamError (err) {
@@ -28,43 +26,42 @@ function streamError (err) {
 
 gulp.task('js:lib', function () {
   return gulp.src([
-    //'bower_components/jquery/dist/jquery.js',
+      //'bower_components/jquery/dist/jquery.js',
   ]).pipe($.concat('lib.js'))
     .pipe($.uglify())
-    .pipe(gulp.dest(path.join(DEST, 'j')))
-    .pipe($.size({gzip: true, showFiles: true, title:'lib scripts'}));
+    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'j')))
+    .pipe($.size({gzip: true, showFiles: true, title:'library scripts'}));
 });
 
 gulp.task('js:main', function () {
   return gulp.src([
-    SRC + '/j/*.js',
-    '!' + SRC + '/j/main.min.js',
+      rootDIR + assetDIR + '/j/main.js',
   ]).pipe($.concat('main.min.js'))
     .pipe($.uglify())
-    .pipe(gulp.dest(path.join(DEST, 'j')))
-    .pipe($.size({gzip: true, showFiles: true, title:'site scripts'}));
+    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'j')))
+    .pipe($.size({gzip: true, showFiles: true, title:'scripts'}));
 });
 
 gulp.task('images', function () {
-  return gulp.src([SRC + '/i/**/*'])
+  return gulp.src([rootDIR + assetDIR + '/i/**/*'])
     .pipe($.imagemin({
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest(path.join(DEST, 'i')))
+    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'i')))
     .pipe($.size({gzip: true, showFiles: false, title:'images'}));
 });
 
 gulp.task('icons', function () {
   var deferred = q.defer();
-  var iconDir  = SRC + '/icons/';
+  var iconDIR  = rootDIR + '/icons/';
   var options  = { enhanceSVG: true };
 
-  var files = fs.readdirSync(iconDir).map(function (fileName) {
-    return path.join(iconDir, fileName);
+  var files = fs.readdirSync(iconDIR).map(function (fileName) {
+    return path.join(iconDIR, fileName);
   });
 
-  var grunticon = new Grunticon(files, DEST + '/icons', options);
+  var grunticon = new Grunticon(files, distDIR + assetDIR + '/icons', options);
 
   grunticon.process(function () {
     deferred.resolve();
@@ -78,32 +75,29 @@ gulp.task('copy', function () {
     'node_modules/apache-server-configs/dist/.htaccess'
   ], {
     dot: true
-  }).pipe(gulp.dest(DEST))
+  }).pipe(gulp.dest(distDIR))
     .pipe($.size({title: 'copy'}));
 });
 
 gulp.task('fonts', function () {
-  return gulp.src([SRC + '/f/**/*'])
-    .pipe(gulp.dest(path.join(DEST, 'f')))
+  return gulp.src([rootDIR + assetDIR + '/f/**/*'])
+    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'f')))
     .pipe($.size({showFiles: true, title: 'fonts'}));
 });
 
 gulp.task('css', function () {
-  return gulp.src([
-      SRC + '/c/index.css',
-      '!' + SRC + '/c/main.css',
-      '!' + SRC + '/c/main.min.css'
-  ]).pipe($.plumber({errorHandler: streamError}))
+  return gulp.src([rootDIR + assetDIR + '/c/index.css'])
+    .pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
       browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
       url: false
     }))
     .pipe($.rename('main.css'))
-    .pipe(gulp.dest(path.join(DEST, 'c')))
+    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'c')))
     .pipe($.size({showFiles: true, title:'styles'}))
     .pipe($.rename('main.min.css'))
     .pipe($.if('*.css', $.minifyCss()))
-    .pipe(gulp.dest(path.join(DEST, 'c')))
+    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'c')))
     .pipe($.size({gzip: true, showFiles: true, title:'styles'}))
     .pipe(browserSync.stream());
 });
@@ -114,14 +108,13 @@ gulp.task('serve', ['build'], function (done) {
     browser: 'google chrome canary',
     notify: false,
     // proxy: '', // BrowserSync for a php server
-    server: DEST
+    server: distDIR
   });
-
-  // Watch Files for changes & do page reload
-  gulp.watch([SRC + '/c/**/*.css'], ['css'], reload);
-  gulp.watch([SRC + '/j/*.js'], ['js:main'], reload);
-  gulp.watch([SRC + '/i/**/*'], ['images'], reload);
-  gulp.watch([SRC + '/icons/*'], ['icons'], reload);
+  
+  gulp.watch([rootDIR + assetDIR + '/c/**/*.css'], ['css'], reload);
+  gulp.watch([rootDIR + assetDIR + '/j/*.js'], ['js:main'], reload);
+  gulp.watch([rootDIR + assetDIR + '/i/**/*'], ['images'], reload);
+  gulp.watch([rootDIR + assetDIR + '/icons/*'], ['icons'], reload);
 });
 
 // -----------------------------------------------------------------------------
@@ -140,14 +133,16 @@ gulp.task('setup', function (cb) {
 });
 
 // Clean up
-gulp.task('clean', function (done) {
+gulp.task('clean', function () {
   require('del')([
-    SRC + '/j/lib.js',
-    SRC + '/j/main.min.js',
-    SRC + '/c/main.css',
-    SRC + '/c/main.min.css',
-    DEST
-  ], done);
+    rootDIR + assetDIR + '/j/lib.js',
+    rootDIR + assetDIR + '/j/main.min.js',
+    rootDIR + assetDIR + '/c/main.css',
+    rootDIR + assetDIR + '/c/main.min.css',
+    distDIR
+  ], function (err, paths) {
+    console.log('Deleted files/folders:\n', paths.join('\n'));
+  });
 });
 
 // -----------------------------------------------------------------------------
