@@ -73,7 +73,7 @@ gulp.task('styles', function () {
   return gulp.src(['./css/index.css'])
     .pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
-      browsers: 'Android 2.3', 'Android >= 4', 'Chrome >= 35', 'Firefox >= 31', 'Explorer >= 9', 'iOS >= 7', 'Opera >= 12', 'Safari >= 7.1',
+      browsers: 'Android 2.3, Android >= 4, Chrome >= 35, Firefox >= 31, Explorer >= 9, iOS >= 7, Opera >= 12, Safari >= 7.1',
       features: {rem: false},
       url: false
     }))
