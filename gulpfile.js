@@ -1,5 +1,3 @@
-/** assembly */
-
 var fs          = require('fs');
 var path        = require('path');
 var spawn       = require('child_process').spawn;
@@ -14,9 +12,9 @@ var runSequence = require('run-sequence');
 var $ = require('gulp-load-plugins')();
 var reload = browserSync.reload;
 
-var rootDIR  = './';
-var assetDIR = '/a'
-var distDIR  = './';
+var rootDIR  = './site';
+var assetDIR = '/assets'
+var distDIR  = './dist';
 
 // Errorhandler
 function streamError (err) {
@@ -24,44 +22,36 @@ function streamError (err) {
   $.util.log(err instanceof $.util.PluginError ? err.toString() : err.stack);
 }
 
-gulp.task('js:lib', function () {
+gulp.task('scripts', function () {
   return gulp.src([
-      //'bower_components/jquery/dist/jquery.js',
-  ]).pipe($.concat('lib.js'))
-    .pipe($.uglify())
-    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'j')))
-    .pipe($.size({gzip: true, showFiles: true, title:'library scripts'}));
-});
-
-gulp.task('js:main', function () {
-  return gulp.src([
-      rootDIR + assetDIR + '/j/main.js',
+    'node_modules/desandro-classie/classie.js',
+    './js/main.js',
   ]).pipe($.concat('main.min.js'))
     .pipe($.uglify())
-    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'j')))
+    .pipe(gulp.dest(path.join(rootDIR, assetDIR, 'js')))
     .pipe($.size({gzip: true, showFiles: true, title:'scripts'}));
 });
 
 gulp.task('images', function () {
-  return gulp.src([rootDIR + assetDIR + '/i/**/*'])
+  return gulp.src([rootDIR + assetDIR + '/img/**/*'])
     .pipe($.imagemin({
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'i')))
+    .pipe(gulp.dest(path.join(rootDIR, assetDIR, 'img')))
     .pipe($.size({gzip: true, showFiles: false, title:'images'}));
 });
 
 gulp.task('icons', function () {
   var deferred = q.defer();
-  var iconDIR  = rootDIR + assetDIR + '/icons/';
+  var iconDIR  = './icons/';
   var options  = { enhanceSVG: true };
 
   var files = fs.readdirSync(iconDIR).map(function (fileName) {
     return path.join(iconDIR, fileName);
   });
 
-  var grunticon = new Grunticon(files, distDIR + assetDIR + '/icons', options);
+  var grunticon = new Grunticon(files, rootDIR + assetDIR + '/icons', options);
 
   grunticon.process(function () {
     deferred.resolve();
@@ -79,30 +69,44 @@ gulp.task('copy', function () {
     .pipe($.size({title: 'copy'}));
 });
 
-gulp.task('fonts', function () {
-  return gulp.src([rootDIR + assetDIR + '/f/**/*'])
-    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'f')))
-    .pipe($.size({showFiles: true, title: 'fonts'}));
-});
-
-gulp.task('css', function () {
-  return gulp.src([rootDIR + assetDIR + '/c/index.css'])
+gulp.task('styles', function () {
+  return gulp.src(['./css/index.css'])
     .pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
-      browsers: '> 1%, last 2 versions, Safari > 5, ie > 9, Firefox ESR',
+      browsers: 'Android 2.3', 'Android >= 4', 'Chrome >= 35', 'Firefox >= 31', 'Explorer >= 9', 'iOS >= 7', 'Opera >= 12', 'Safari >= 7.1',
+      features: {rem: false},
       url: false
     }))
     .pipe($.rename('main.css'))
-    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'c')))
+    .pipe(gulp.dest(path.join(rootDIR, assetDIR, 'css')))
     .pipe($.size({showFiles: true, title:'styles'}))
     .pipe($.rename('main.min.css'))
     .pipe($.if('*.css', $.minifyCss()))
-    .pipe(gulp.dest(path.join(distDIR, assetDIR, 'c')))
+    .pipe(gulp.dest(path.join(rootDIR, assetDIR, 'css')))
     .pipe($.size({gzip: true, showFiles: true, title:'styles'}))
     .pipe(browserSync.stream());
 });
 
-gulp.task('serve', ['build'], function (done) {
+gulp.task('uncss', function() {
+  return gulp.src([rootDIR + assetDIR + '/css/main.css'])
+    .pipe($.uncss({
+      html: [
+        distDIR + '/*.html',
+        distDIR + '/**/*.html'
+      ],
+      // CSS Selectors for UnCSS to ignore
+      ignore: [
+        /.js/,
+        /svg/
+      ]
+    }))
+    .pipe($.rename('main.min.css'))
+    .pipe($.if('*.css', $.minifyCss()))
+    .pipe(gulp.dest(path.join(rootDIR, assetDIR, 'css')))
+    .pipe($.size({gzip: true, showFiles: true, title:'styles'}));
+});
+
+gulp.task('serve', ['build:serve'], function (done) {
 
   browserSync.init({
     browser: 'google chrome canary',
@@ -110,35 +114,40 @@ gulp.task('serve', ['build'], function (done) {
     // proxy: '', // BrowserSync for a php server
     server: distDIR
   });
-  
-  gulp.watch([rootDIR + assetDIR + '/c/**/*.css'], ['css'], reload);
-  gulp.watch([rootDIR + assetDIR + '/j/*.js'], ['js:main'], reload);
-  gulp.watch([rootDIR + assetDIR + '/i/**/*'], ['images'], reload);
-  gulp.watch([rootDIR + assetDIR + '/icons/*'], ['icons'], reload);
+
+  // Watch Files for changes & do page reload
+  gulp.watch([
+    './_config.yml',
+    rootDIR + '/_includes/*.html',
+    rootDIR + '/_layouts/*.html',
+    rootDIR + '/_posts/*',
+    rootDIR + '/*.{html,md}',
+    rootDIR + '/assets/**/*'
+  ], ['jekyll:rebuild']);
+
+  gulp.watch(['css/*.css'], ['styles'], reload);
+  gulp.watch(['js/*.js'], ['scripts'], reload);
+});
+
+gulp.task('serve:dist', ['build'], function (done) {
+
+  browserSync.init({
+    notify: false,
+    server: distDIR
+  });
 });
 
 // -----------------------------------------------------------------------------
 // | Setup tasks                                                               |
 // -----------------------------------------------------------------------------
 
-// Install/Update bower components
-gulp.task('bower', function (cb) {
-  var proc = spawn('./node_modules/bower/bin/bower', ['install'], {cwd: './', stdio: 'inherit'});
-  proc.on('close', cb);
-});
-
-// Set up
-gulp.task('setup', function (cb) {
-  runSequence(['bower'], cb);
-});
-
 // Clean up
 gulp.task('clean', function () {
   require('del')([
-    rootDIR + assetDIR + '/j/lib.js',
-    rootDIR + assetDIR + '/j/main.min.js',
-    rootDIR + assetDIR + '/c/main.css',
-    rootDIR + assetDIR + '/c/main.min.css',
+    rootDIR + assetDIR + '/js/main.min.js',
+    rootDIR + assetDIR + '/css/main.css',
+    rootDIR + assetDIR + '/css/main.min.css',
+    rootDIR + assetDIR + '/icons/',
     distDIR
   ], function (err, paths) {
     console.log('Deleted files/folders:\n', paths.join('\n'));
@@ -149,11 +158,27 @@ gulp.task('clean', function () {
 // | Build tasks                                                               |
 // -----------------------------------------------------------------------------
 
-// Build
+gulp.task('jekyll:build', function (done) {
+  return spawn('jekyll', ['build', '--config=./_config.yml'], {stdio: 'inherit'}).on('close', done);
+});
+
+gulp.task('jekyll:rebuild', ['jekyll:build'], function () {
+  browserSync.reload();
+});
+
 gulp.task('build', function (done) {
   runSequence(
-    'css',
-    ['js:lib', 'js:main', 'images', 'icons', 'copy', 'fonts'],
+    'styles',
+    ['scripts', 'images', 'icons', 'copy'],
+    'jekyll:build',
+  done);
+});
+
+gulp.task('build:serve', function (done) {
+  runSequence(
+    'styles',
+    ['scripts', 'icons', 'copy'],
+    'jekyll:build',
   done);
 });
 
