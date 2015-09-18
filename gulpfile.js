@@ -149,10 +149,11 @@ gulp.task('clean', function () {
     rootDIR + assetDIR + '/css/main.min.css',
     rootDIR + assetDIR + '/icons/',
     distDIR
-  ], function (err, paths) {
+  ]).then(function (paths) {
     console.log('Deleted files/folders:\n', paths.join('\n'));
   });
 });
+
 
 // -----------------------------------------------------------------------------
 // | Build tasks                                                               |
