@@ -87,7 +87,7 @@ gulp.task('styles', function () {
     .pipe(browserSync.stream());
 });
 
-gulp.task('uncss', function() {
+gulp.task('uncss', function () {
   return gulp.src([rootDIR + assetDIR + '/css/main.css'])
     .pipe($.uncss({
       html: [
@@ -125,8 +125,8 @@ gulp.task('serve', ['build:serve'], function (done) {
     rootDIR + '/assets/**/*'
   ], ['jekyll:rebuild']);
 
-  gulp.watch(['css/*.css'], ['styles'], reload);
-  gulp.watch(['js/*.js'], ['scripts'], reload);
+  gulp.watch(['./css/*.css'], ['styles'], reload);
+  gulp.watch(['./js/*.js'], ['scripts'], reload);
 });
 
 gulp.task('serve:dist', ['build'], function (done) {
