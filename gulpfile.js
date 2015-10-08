@@ -17,14 +17,13 @@ var assetDIR = '/assets'
 var distDIR  = './dist';
 
 // Errorhandler
-function streamError (err) {
+function streamError(err) {
   $.util.beep();
   $.util.log(err instanceof $.util.PluginError ? err.toString() : err.stack);
 }
 
-gulp.task('scripts', function () {
+gulp.task('scripts', function() {
   return gulp.src([
-    'node_modules/desandro-classie/classie.js',
     './js/main.js',
   ]).pipe($.concat('main.min.js'))
     .pipe($.uglify())
@@ -32,7 +31,7 @@ gulp.task('scripts', function () {
     .pipe($.size({gzip: true, showFiles: true, title:'scripts'}));
 });
 
-gulp.task('images', function () {
+gulp.task('images', function() {
   return gulp.src([rootDIR + assetDIR + '/img/**/*'])
     .pipe($.imagemin({
       progressive: true,
@@ -42,7 +41,7 @@ gulp.task('images', function () {
     .pipe($.size({gzip: true, showFiles: false, title:'images'}));
 });
 
-gulp.task('icons', function () {
+gulp.task('icons', function() {
   var deferred = q.defer();
   var iconDIR  = './icons/';
   var options  = { enhanceSVG: true };
@@ -53,14 +52,14 @@ gulp.task('icons', function () {
 
   var grunticon = new Grunticon(files, rootDIR + assetDIR + '/icons', options);
 
-  grunticon.process(function () {
+  grunticon.process(function() {
     deferred.resolve();
   });
 
   return deferred.promise;
 });
 
-gulp.task('copy', function () {
+gulp.task('copy', function() {
   return gulp.src([
     'node_modules/apache-server-configs/dist/.htaccess'
   ], {
@@ -69,7 +68,7 @@ gulp.task('copy', function () {
     .pipe($.size({title: 'copy'}));
 });
 
-gulp.task('styles', function () {
+gulp.task('styles', function() {
   return gulp.src(['./css/index.css'])
     .pipe($.plumber({errorHandler: streamError}))
     .pipe(cssnext({
@@ -87,7 +86,7 @@ gulp.task('styles', function () {
     .pipe(browserSync.stream());
 });
 
-gulp.task('uncss', function () {
+gulp.task('uncss', function() {
   return gulp.src([rootDIR + assetDIR + '/css/main.css'])
     .pipe($.uncss({
       html: [
@@ -106,12 +105,11 @@ gulp.task('uncss', function () {
     .pipe($.size({gzip: true, showFiles: true, title:'styles'}));
 });
 
-gulp.task('serve', ['build:serve'], function (done) {
+gulp.task('serve', ['build:serve'], function(done) {
 
   browserSync.init({
     browser: 'google chrome canary',
     notify: false,
-    // proxy: '', // BrowserSync for a php server
     server: distDIR
   });
 
@@ -129,7 +127,7 @@ gulp.task('serve', ['build:serve'], function (done) {
   gulp.watch(['./js/*.js'], ['scripts'], reload);
 });
 
-gulp.task('serve:dist', ['build'], function (done) {
+gulp.task('serve:dist', ['build'], function(done) {
 
   browserSync.init({
     notify: false,
@@ -141,7 +139,6 @@ gulp.task('serve:dist', ['build'], function (done) {
 // | Setup tasks                                                               |
 // -----------------------------------------------------------------------------
 
-// Clean up
 gulp.task('clean', function () {
   require('del')([
     rootDIR + assetDIR + '/js/main.min.js',
