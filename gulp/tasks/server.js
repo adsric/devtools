@@ -4,8 +4,10 @@ var gulp        = require('gulp'),
 
 function server() {
   browserSync.init({
-    server: config.paths.project.dest,
-    files: config.paths.project.dest
+    browser: 'google chrome canary',
+    logPrefix: 'Server',
+    files: config.paths.project.dest,
+    server: config.paths.project.dest
   });
 }
 
