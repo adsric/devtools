@@ -1,6 +1,11 @@
 var gulp    = require('gulp'),
     config  = require('../config'),
+    cache   = require('gulp-cache'),
     path    = require('path');
+
+function clear(done) {
+  return cache.clearAll(done);
+}
 
 function del() {
   require('del')([
@@ -10,4 +15,5 @@ function del() {
   });
 }
 
+gulp.task('clear', clear);
 gulp.task('clean', del);

@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "build": "gulp build",
+    "clear": "gulp clear",
     "clean": "gulp clean",
     "serve": "gulp serve",
     "server": "gulp server"
