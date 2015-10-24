@@ -10,12 +10,15 @@ requireDir('./gulp/tasks', { recurse: true });
 gulp.task('build', [
   'styles',
   'scripts',
-  'images'
+  'images',
+  'icons',
+  'icons-fallbacks'
 ]);
 
 gulp.task('watch', [
   'styles_watcher',
-  'scripts_watcher'
+  'scripts_watcher',
+  'icons_watcher'
 ]);
 
 gulp.task('serve', [

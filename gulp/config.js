@@ -17,6 +17,10 @@ module.exports = {
     img: {
       all: './img/**/*',
       dest: './dist/img'
+    },
+    icons: {
+      all: './icons/*.svg',
+      dest: './dist/icons'
     }
   },
   names: {
