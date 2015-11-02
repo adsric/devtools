@@ -5,14 +5,16 @@
   "private": true,
   "scripts": {
     "build": "gulp build",
-    "clear": "gulp clear",
     "clean": "gulp clean",
+    "clear": "gulp clear",
+    "csscomb": "csscomb css/*.css",
     "serve": "gulp serve",
     "server": "gulp server"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.3",
     "browser-sync": "^2.9.11",
+    "csscomb": "^3.1.8",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-cache": "^0.3.0",
