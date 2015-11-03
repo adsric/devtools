@@ -6,8 +6,8 @@ function server() {
   browserSync.init({
     browser: 'google chrome canary',
     logPrefix: 'Server',
-    files: config.paths.project.dest,
-    server: config.paths.project.dest
+    files: config.paths.server.files,
+    server: config.paths.server.files
   });
 }
 

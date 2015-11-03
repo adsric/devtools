@@ -9,7 +9,8 @@
     "clear": "gulp clear",
     "csscomb": "csscomb css/*.css",
     "serve": "gulp serve",
-    "server": "gulp server"
+    "server": "gulp server",
+    "setup": "npm install"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.3",

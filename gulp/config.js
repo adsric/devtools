@@ -21,6 +21,9 @@ module.exports = {
     icons: {
       all: './icons/*.svg',
       dest: './dist/icons'
+    },
+    server: {
+      files: './dist'
     }
   },
   names: {
