@@ -1,3 +1,4 @@
+
 GLOBAL.config = {
   src: {
     root: 'src',
@@ -23,6 +24,7 @@ GLOBAL.config = {
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var requireDir = require('require-dir');
+
 
 requireDir('./gulp-tasks');
 
