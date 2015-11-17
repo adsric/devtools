@@ -1,10 +1,9 @@
-var gulp          = require('gulp'),
-    config        = require('../config'),
-    minifycss     = require('gulp-minify-css'),
-    postcss       = require('gulp-postcss'),
-    rename        = require('gulp-rename'),
-    size          = require('gulp-size'),
-    autoprefixer  = require('autoprefixer');
+var gulp = require('gulp');
+var minifycss = require('gulp-minify-css');
+var postcss = require('gulp-postcss');
+var rename = require('gulp-rename');
+var size = require('gulp-size');
+var autoprefixer = require('autoprefixer');
 
 var cssprefixes = [
   'Android 2.3',
@@ -24,26 +23,28 @@ var cssprefixes = [
 
 var processors = [
   require('postcss-import')(),
-  require('postcss-cssnext')(),
+  require('postcss-cssnext')({
+    features: {
+      customProperties: {
+        strict: false, // disable variable fallbacks from being redundantly added
+      },
+      rem: true,
+      pseudoElements: false,
+      colorRgba: false
+    }
+  }),
   require('postcss-reporter')(),
   autoprefixer({ browsers: cssprefixes }),
 ];
 
 function styles() {
-  return gulp.src(config.paths.css.src)
+  return gulp.src(GLOBAL.config.src.styles + '/main.css')
     .pipe(postcss(processors))
-    .pipe(gulp.dest(config.paths.css.dest))
+    .pipe(gulp.dest(GLOBAL.config.build.styles))
     .pipe(minifycss())
-    .pipe(rename(config.names.css))
-    .pipe(gulp.dest(config.paths.css.dest))
+    .pipe(rename(GLOBAL.config.filename.styles))
+    .pipe(gulp.dest(GLOBAL.config.build.styles))
     .pipe(size({ gzip: true, showFiles: true, title:'styles' }));
 }
 
-function styles_watcher() {
-  gulp.watch(config.paths.css.all, function() {
-    styles();
-  });
-}
-
 gulp.task('styles', styles);
-gulp.task('styles_watcher', styles_watcher);
