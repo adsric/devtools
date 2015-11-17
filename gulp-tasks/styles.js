@@ -23,16 +23,11 @@ var cssprefixes = [
 
 var processors = [
   require('postcss-import')(),
-  require('postcss-cssnext')({
-    features: {
-      customProperties: {
-        strict: false, // disable variable fallbacks from being redundantly added
-      },
-      rem: true,
-      pseudoElements: false,
-      colorRgba: false
-    }
-  }),
+  require('postcss-custom-properties')(),
+  require('postcss-custom-media')(),
+  require('postcss-custom-selectors')(),
+  require('postcss-calc')(),
+  require('pixrem')(),
   require('postcss-reporter')(),
   autoprefixer({ browsers: cssprefixes }),
 ];
