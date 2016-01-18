@@ -1,11 +1,11 @@
 
 GLOBAL.config = {
   src: {
-    root: 'src',
-    icons: 'src/icons',
-    images: 'src/images',
-    styles: 'src/css',
-    scripts: 'src/js'
+    root: 'site',
+    icons: 'icons',
+    images: 'images',
+    styles: 'css',
+    scripts: 'js'
   },
   build: {
     root: 'build',
@@ -31,7 +31,6 @@ var commonBuildTasks = [
   'styles',
   'scripts',
   'icons',
-  'icons-fallbacks',
   'images'
 ];
 

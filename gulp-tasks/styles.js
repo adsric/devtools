@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var minifycss = require('gulp-minify-css');
+var nano = require('gulp-cssnano');
 var postcss = require('gulp-postcss');
 var rename = require('gulp-rename');
 var size = require('gulp-size');
@@ -15,7 +15,7 @@ var cssprefixes = [
   // For example, at the time of writing, Edge 20 on an up-to-date system uses EdgeHTML 12.
   // See also https://github.com/Fyrd/caniuse/issues/1928
   'Edge >= 12',
-  'Explorer >= 9',
+  'Explorer >= 11',
   'iOS >= 7',
   'Opera >= 12',
   'Safari >= 7.1'
@@ -36,7 +36,7 @@ function styles() {
   return gulp.src(GLOBAL.config.src.styles + '/main.css')
     .pipe(postcss(processors))
     .pipe(gulp.dest(GLOBAL.config.build.styles))
-    .pipe(minifycss())
+    .pipe(nano())
     .pipe(rename(GLOBAL.config.filename.styles))
     .pipe(gulp.dest(GLOBAL.config.build.styles))
     .pipe(size({ gzip: true, showFiles: true, title:'styles' }));
