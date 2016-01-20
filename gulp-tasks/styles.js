@@ -27,7 +27,6 @@ var processors = [
   require('postcss-custom-media')(),
   require('postcss-custom-selectors')(),
   require('postcss-calc')(),
-  require('pixrem')(),
   require('postcss-reporter')(),
   autoprefixer({ browsers: cssprefixes }),
 ];
