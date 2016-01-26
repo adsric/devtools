@@ -4,7 +4,7 @@ var size = require('gulp-size');
 var uglify = require('gulp-uglify');
 
 function scripts() {
-  return gulp.src(GLOBAL.config.src.scripts + '/**/*.{js}')
+  return gulp.src(GLOBAL.config.src.scripts + '/**/*.js')
     .pipe(concat(GLOBAL.config.filename.scripts))
     .pipe(uglify())
     .pipe(gulp.dest(GLOBAL.config.build.scripts))
