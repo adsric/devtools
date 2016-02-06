@@ -7,7 +7,8 @@ function scripts() {
   return gulp.src(GLOBAL.config.src.scripts + '/**/*.js')
     .pipe(concat(GLOBAL.config.filename.scripts))
     .pipe(uglify())
-    .pipe(gulp.dest(GLOBAL.config.build.scripts))
+    .pipe(rename({ suffix: ".min" }))
+    .pipe(gulp.dest(GLOBAL.config.output.scripts))
     .pipe(size({ gzip: true, showFiles: true, title:'scripts' }));
 }
 

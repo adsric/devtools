@@ -8,7 +8,7 @@ function images() {
       progressive: true,
       interlaced: true
     }))
-    .pipe(gulp.dest(GLOBAL.config.build.images))
+    .pipe(gulp.dest(GLOBAL.config.output.images))
     .pipe(size({ gzip: true, showFiles: false, title:'images' }));
 }
 

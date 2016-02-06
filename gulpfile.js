@@ -1,22 +1,26 @@
 
 GLOBAL.config = {
+  filename: {
+    scripts: 'main.js',
+    styles: 'main.css'
+  },
   src: {
-    root: 'site',
     icons: 'icons',
     images: 'images',
-    styles: 'css',
-    scripts: 'js'
+    scripts: 'js',
+    styles: 'index.css',
   },
-  build: {
-    root: 'build',
+  output: {
     icons: 'build/icons',
     images: 'build/images',
-    styles: 'build/css',
-    scripts: 'build/js'
+    scripts: 'build/js',
+    styles: 'build/css'
   },
-  filename: {
-    styles: 'main.min.css',
-    scripts: 'main.min.js'
+  watch: {
+    icons: 'icons,'
+    images: 'images',
+    scripts: 'js',
+    styles: 'css'
   }
 };
 
@@ -28,8 +32,8 @@ var requireDir = require('require-dir');
 requireDir('./gulp-tasks');
 
 var commonBuildTasks = [
-  'styles',
   'scripts',
+  'styles',
   'icons',
   'images'
 ];

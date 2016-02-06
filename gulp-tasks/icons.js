@@ -11,7 +11,7 @@ function icons() {
     .pipe(svgmin())
     .pipe(svgstore())
     .pipe(rename({ basename: 'sprite' }))
-    .pipe(gulp.dest(GLOBAL.config.build.icons))
+    .pipe(gulp.dest(GLOBAL.config.output.icons))
     .pipe(size({ gzip: true, showFiles: false, title:'icons' }));
 }
 
