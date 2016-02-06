@@ -44,7 +44,7 @@ gulp.task('build', [], function(cb) {
   cb);
 });
 
-gulp.task('serve', [], function(cb) {
+gulp.task('watch', [], function(cb) {
   runSequence(
     commonBuildTasks,
     'watch',

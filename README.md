@@ -1,8 +1,10 @@
-# Tooling & Workflow (WIP)
+# Tooling (WIP)
 
-A set of tools that combine to form a workflow.
+A set of tools that combine to form a workflow for website assets.
 
-- [NodeJS](https://nodejs.org): for easily building fast, scalable network applications.
+## Requirements
+
+[NodeJS](https://nodejs.org): for easily building fast, scalable network applications.
 
 ## Setup
 
@@ -16,6 +18,6 @@ These are the stand out commands available:-
 
 Builds assets.
 
-`$ npm run serve`
+`$ npm run watch`
 
-Builds assets and launches a server.
+Builds assets and watch for changes.
