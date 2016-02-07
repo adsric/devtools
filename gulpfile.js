@@ -5,9 +5,9 @@ GLOBAL.config = {
     styles: 'main.css'
   },
   src: {
-    icons: 'icons',
-    images: 'images',
-    scripts: 'js',
+    icons: 'src/icons',
+    images: 'src/images',
+    scripts: 'src/js',
     styles: 'index.css',
   },
   output: {
@@ -17,10 +17,10 @@ GLOBAL.config = {
     styles: 'build/css'
   },
   watch: {
-    icons: 'icons,'
-    images: 'images',
-    scripts: 'js',
-    styles: 'css'
+    icons: 'src/icons,'
+    images: 'src/images',
+    scripts: 'src/js',
+    styles: 'src/css'
   }
 };
 

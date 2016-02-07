@@ -1,16 +1,25 @@
 var gulp = require('gulp');
-var imagemin = require('gulp-imagemin');
-var rename = require('gulp-rename');
+var svgSprite = require('gulp-svg-sprite');
 var size = require('gulp-size');
-var svgmin = require('gulp-svgmin');
-var svgstore = require('gulp-svgstore');
+
+// SVG Config
+var config = {
+  mode: {
+    symbol: { // symbol mode to build the SVG
+      dest: '', // destination folder
+      sprite: 'icons.svg', //sprite name
+      example: true // Build sample page
+    }
+  },
+  svg: {
+    xmlDeclaration: false, // strip out the XML attribute
+    doctypeDeclaration: false // don't include the !DOCTYPE declaration
+  }
+};
 
 function icons() {
   return gulp.src(GLOBAL.config.src.icons + '/*.{svg}')
-    .pipe(rename({ prefix: 'icon-' }))
-    .pipe(svgmin())
-    .pipe(svgstore())
-    .pipe(rename({ basename: 'sprite' }))
+    .pipe(svgSprite(config))
     .pipe(gulp.dest(GLOBAL.config.output.icons))
     .pipe(size({ gzip: true, showFiles: false, title:'icons' }));
 }
