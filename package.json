@@ -25,7 +25,7 @@
   "scripts": {
     "build": "gulp build",
     "watch": "gulp watch",
-    "setup": "npm install && mkdir -p dist",
+    "setup": "npm install && mkdir -p _build",
     "start": "npm run build"
   }
 }

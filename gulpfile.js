@@ -1,8 +1,8 @@
 
 GLOBAL.config = {
   filename: {
-    scripts: 'main.js',
-    styles: 'main.css'
+    scripts: 'bundle.js',
+    styles: 'styles.css'
   },
   src: {
     icons: 'src/icons',
@@ -11,10 +11,10 @@ GLOBAL.config = {
     styles: 'index.css',
   },
   output: {
-    icons: 'build/icons',
-    images: 'build/images',
-    scripts: 'build/js',
-    styles: 'build/css'
+    icons: '_build/icons',
+    images: '_build/images',
+    scripts: '_build/js',
+    styles: '_build/css'
   },
   watch: {
     icons: 'src/icons,'
