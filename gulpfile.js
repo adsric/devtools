@@ -7,19 +7,19 @@ GLOBAL.config = {
   src: {
     icons: 'src/icons',
     images: 'src/images',
-    scripts: 'src/js',
-    styles: 'index.css',
+    scripts: 'src/javascript',
+    styles: 'src/css/index.css',
   },
   output: {
     icons: '_build/icons',
     images: '_build/images',
-    scripts: '_build/js',
-    styles: '_build/css'
+    scripts: '_build/scripts',
+    styles: '_build/styles'
   },
   watch: {
-    icons: 'src/icons,'
+    icons: 'src/icons',
     images: 'src/images',
-    scripts: 'src/js',
+    scripts: 'src/javascript',
     styles: 'src/css'
   }
 };
@@ -44,7 +44,7 @@ gulp.task('build', [], function(cb) {
   cb);
 });
 
-gulp.task('watch', [], function(cb) {
+gulp.task('build:watch', [], function(cb) {
   runSequence(
     commonBuildTasks,
     'watch',

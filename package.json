@@ -24,7 +24,7 @@
   "private": true,
   "scripts": {
     "build": "gulp build",
-    "watch": "gulp watch",
+    "watch": "gulp build:watch",
     "setup": "npm install && mkdir -p _build",
     "start": "npm run build"
   }

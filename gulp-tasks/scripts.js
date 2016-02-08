@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
+var rename = require('gulp-rename');
 var size = require('gulp-size');
 var uglify = require('gulp-uglify');
 
