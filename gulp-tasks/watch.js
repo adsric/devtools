@@ -6,7 +6,7 @@ function watch() {
     logLevel: 'silent',
     logPrefix: 'BS',
     server: './',
-    port: 3000,
+    port: 8080,
     // Prevent browser sync from display in page notifications
     notify: false,
     open: false
