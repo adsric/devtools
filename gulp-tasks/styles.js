@@ -32,13 +32,12 @@ var processors = [
 ];
 
 function styles() {
-  return gulp.src(GLOBAL.config.src.styles)
+  return gulp.src(GLOBAL.config.src.styles + '/*.css')
     .pipe(postcss(processors))
-    .pipe(rename(GLOBAL.config.filename.styles))
-    .pipe(gulp.dest(GLOBAL.config.output.styles))
+    .pipe(gulp.dest(GLOBAL.config.build.styles))
     .pipe(nano())
     .pipe(rename({ suffix: ".min" }))
-    .pipe(gulp.dest(GLOBAL.config.output.styles))
+    .pipe(gulp.dest(GLOBAL.config.build.styles))
     .pipe(size({ gzip: true, showFiles: true, title:'styles' }));
 }
 

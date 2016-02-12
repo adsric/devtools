@@ -3,10 +3,10 @@ var path = require('path');
 
 function clean() {
   require('del')([
-     GLOBAL.config.output.scripts,
-     GLOBAL.config.output.styles,
-     GLOBAL.config.output.icons,
-     GLOBAL.config.output.images
+     GLOBAL.config.build.scripts,
+     GLOBAL.config.build.styles,
+     GLOBAL.config.build.icons,
+     GLOBAL.config.build.images
   ]).then(function(paths) {
     console.log('Deleted files/folders:\n', paths.join('\n'));
   });

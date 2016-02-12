@@ -5,7 +5,7 @@ function watch() {
   browserSync.init({
     logLevel: 'silent',
     logPrefix: 'BS',
-    server: './',
+    server: GLOBAL.config.build.root,
     port: 8080,
     // Prevent browser sync from display in page notifications
     notify: false,
@@ -13,15 +13,15 @@ function watch() {
   });
 
   // Styles / CSS
-  gulp.watch([GLOBAL.config.watch.styles + '/**/*'],
+  gulp.watch([GLOBAL.config.src.styles + '/**/*'],
     ['styles'], browserSync.reload);
 
   // Scripts
-  gulp.watch([GLOBAL.config.watch.scripts + '/**/*'],
+  gulp.watch([GLOBAL.config.src.scripts + '/**/*'],
     ['scripts'], browserSync.reload);
 
   // Images
-  gulp.watch([GLOBAL.config.watch.images + '/**/*'],
+  gulp.watch([GLOBAL.config.src.images + '/**/*'],
     ['images'], browserSync.reload);
 }
 

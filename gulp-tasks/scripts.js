@@ -9,7 +9,7 @@ function scripts() {
     .pipe(concat(GLOBAL.config.filename.scripts))
     .pipe(uglify())
     .pipe(rename({ suffix: ".min" }))
-    .pipe(gulp.dest(GLOBAL.config.output.scripts))
+    .pipe(gulp.dest(GLOBAL.config.build.scripts))
     .pipe(size({ gzip: true, showFiles: true, title:'scripts' }));
 }
 

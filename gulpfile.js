@@ -2,25 +2,19 @@
 GLOBAL.config = {
   filename: {
     scripts: 'bundle.js',
-    styles: 'styles.css'
   },
   src: {
     icons: 'src/icons',
     images: 'src/images',
-    scripts: 'src/javascript',
-    styles: 'src/css/index.css',
+    scripts: 'src/javascripts',
+    styles: 'src/stylesheets',
   },
-  output: {
+  build: {
+    root: '_build',
     icons: '_build/icons',
     images: '_build/images',
     scripts: '_build/scripts',
     styles: '_build/styles'
-  },
-  watch: {
-    icons: 'src/icons',
-    images: 'src/images',
-    scripts: 'src/javascript',
-    styles: 'src/css'
   }
 };
 
