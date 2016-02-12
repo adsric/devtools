@@ -6,7 +6,7 @@ var uglify = require('gulp-uglify');
 
 function scripts() {
   return gulp.src(GLOBAL.config.src.scripts + '/**/*.js')
-    .pipe(concat(GLOBAL.config.filename.scripts))
+    .pipe(concat('bundle.js'))
     .pipe(uglify())
     .pipe(rename({ suffix: ".min" }))
     .pipe(gulp.dest(GLOBAL.config.build.scripts))
