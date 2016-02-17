@@ -18,7 +18,7 @@ var config = {
 };
 
 function icons() {
-  return gulp.src(GLOBAL.config.src.icons + '/*.{svg}')
+  return gulp.src(GLOBAL.config.src.icons + '/**/*.svg')
     .pipe(svgSprite(config))
     .pipe(gulp.dest(GLOBAL.config.build.icons))
     .pipe(size({ gzip: true, showFiles: false, title:'icons' }));

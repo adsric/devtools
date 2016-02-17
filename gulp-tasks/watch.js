@@ -23,6 +23,10 @@ function watch() {
   // Images
   gulp.watch([GLOBAL.config.src.images + '/**/*'],
     ['images'], browserSync.reload);
+
+  // Icons
+  gulp.watch([GLOBAL.config.src.icons + '/**/*.svg'],
+    ['icons'], browserSync.reload);
 }
 
 gulp.task('watch', watch);
