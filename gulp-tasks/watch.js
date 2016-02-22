@@ -6,7 +6,7 @@ function watch() {
     logLevel: 'silent',
     logPrefix: 'BS',
     server: GLOBAL.config.build.root,
-    port: 8080,
+    port: 8000,
     // Prevent browser sync from display in page notifications
     notify: false,
     open: false
