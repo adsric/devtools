@@ -4,6 +4,7 @@ var postcss = require('gulp-postcss');
 var rename = require('gulp-rename');
 var size = require('gulp-size');
 var autoprefixer = require('autoprefixer');
+var stylelint = require('stylelint');
 
 var cssprefixes = [
   'Android 2.3',
@@ -27,8 +28,9 @@ var processors = [
   require('postcss-custom-media')(),
   require('postcss-custom-selectors')(),
   require('postcss-calc')(),
-  require('postcss-reporter')(),
+  stylelint(),
   autoprefixer({ browsers: cssprefixes }),
+  require('postcss-reporter')({ clearMessages: true }),
 ];
 
 function styles() {
