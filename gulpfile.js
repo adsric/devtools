@@ -10,7 +10,7 @@ GLOBAL.config = {
     root: '_build',
     icons: '_build/icons',
     images: '_build/images',
-    styles: '_build/styles'
+    styles: '_build/styles',
     scripts: '_build/scripts',
   }
 };
