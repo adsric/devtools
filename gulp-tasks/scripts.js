@@ -5,7 +5,10 @@ var size = require('gulp-size');
 var uglify = require('gulp-uglify');
 
 function scripts() {
-  return gulp.src(GLOBAL.config.src.scripts + '/**/*.js')
+  return gulp.src([
+      GLOBAL.config.src.scripts + '/vendor/*.js',
+      GLOBAL.config.src.scripts + '/*.js'
+    ])
     .pipe(concat('bundle.js'))
     .pipe(uglify())
     .pipe(rename({ suffix: ".min" }))
