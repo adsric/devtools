@@ -21,7 +21,6 @@
     "selector-list-comma-space-before": "never",
     "selector-list-comma-newline-after": "always",
     "selector-no-id": true,
-    "string-quotes": "double",
-    "value-no-vendor-prefix": false
+    "string-quotes": "double"
   }
 }
