@@ -1,6 +1,6 @@
-# Tooling (WIP)
+# GulpJS Frontend Tooling
 
-A set of tools that combine to form a workflow for website assets.
+A set of gulp tasks that compile, optimize assets.
 
 ## Requirements
 
