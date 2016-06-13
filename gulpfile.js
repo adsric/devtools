@@ -65,6 +65,17 @@ gulp.task('copy', function() {
     .pipe(size({ title: 'copy' }));
 });
 
+// Lint stylesheets.
+gulp.task('lint-styles', function () {
+  var processors = [
+    stylelint(),
+    require('postcss-reporter')({ clearMessages: true }),
+  ];
+
+  return gulp.src(paths.styles.src + '/**/*.css')
+    .pipe(postcss(processors));
+});
+
 // Compile and automatically prefix stylesheets.
 gulp.task('styles', function() {
   var cssprefixes = [
@@ -89,7 +100,6 @@ gulp.task('styles', function() {
     require('postcss-custom-media')(),
     require('postcss-custom-selectors')(),
     require('postcss-calc')(),
-    stylelint(),
     autoprefixer({ browsers: cssprefixes }),
     require('postcss-reporter')({ clearMessages: true }),
   ];
@@ -154,6 +164,7 @@ gulp.task('watch', function() {
 
 var buildTasks = [
   'scripts',
+  'lint-styles',
   'styles',
   'icons',
   'images'
