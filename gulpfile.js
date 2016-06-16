@@ -66,7 +66,7 @@ gulp.task('copy', function() {
 });
 
 // Lint stylesheets.
-gulp.task('lint-styles', function () {
+gulp.task('styles-linter', function () {
   var processors = [
     stylelint(),
     require('postcss-reporter')({ clearMessages: true }),
@@ -164,7 +164,7 @@ gulp.task('watch', function() {
 
 var buildTasks = [
   'scripts',
-  'lint-styles',
+  'styles-linter',
   'styles',
   'icons',
   'images'
