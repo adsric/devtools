@@ -51,6 +51,7 @@ gulp.task('scripts', function() {
       paths.scripts.src + '/*.js'
     ])
     .pipe(concat('bundle.js'))
+    .pipe(gulp.dest(paths.scripts.output))
     .pipe(uglify())
     .pipe(rename({ suffix: ".min" }))
     .pipe(gulp.dest(paths.scripts.output))
