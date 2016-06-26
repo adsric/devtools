@@ -11,7 +11,6 @@ var postcss = require('gulp-postcss');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
 var size = require('gulp-size');
-var stylelint = require('stylelint');
 var svgSprite = require('gulp-svg-sprite');
 var uglify = require('gulp-uglify');
 
@@ -64,17 +63,6 @@ gulp.task('copy', function() {
     dot: true
   }).pipe(gulp.dest(paths.static.output))
     .pipe(size({ title: 'copy' }));
-});
-
-// Lint stylesheets.
-gulp.task('styles-linter', function () {
-  var processors = [
-    stylelint(),
-    require('postcss-reporter')({ clearMessages: true }),
-  ];
-
-  return gulp.src(paths.styles.src + '/**/*.css')
-    .pipe(postcss(processors));
 });
 
 // Compile and automatically prefix stylesheets.
@@ -165,7 +153,6 @@ gulp.task('watch', function() {
 
 var buildTasks = [
   'scripts',
-  'styles-linter',
   'styles',
   'icons',
   'images'

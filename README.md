@@ -1,6 +1,6 @@
-# GulpJS Frontend Tooling
+# Gulp Tooling
 
-A set of gulp tasks that compile, optimize assets.
+A set of gulp tasks that compile, optimize frontend assets.
 
 ## Requirements
 
