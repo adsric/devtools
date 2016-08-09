@@ -87,7 +87,6 @@ gulp.task('styles', function() {
     require('postcss-import')(),
     require('postcss-custom-properties')(),
     require('postcss-custom-media')(),
-    require('postcss-custom-selectors')(),
     require('postcss-calc')(),
     autoprefixer({ browsers: cssprefixes }),
     require('postcss-reporter')({ clearMessages: true }),
