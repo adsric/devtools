@@ -6,7 +6,6 @@ var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
 var imagemin = require('gulp-imagemin');
 var nano = require('gulp-cssnano');
-var path = require('path');
 var postcss = require('gulp-postcss');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
@@ -18,27 +17,27 @@ var reload = browserSync.reload;
 
 var paths = {
     scripts: {
-        src: '',
+        input: '',
         output: ''
     },
     static: {
-        src: '',
+        input: '',
         output: ''
     },
     styles: {
-        src: '',
+        input: '',
         output: ''
     },
     icons: {
-        src: '',
+        input: '',
         output: ''
     },
     images: {
-        src: '',
+        input: '',
         output: ''
     },
     watch: {
-        dir: ''
+        output: ''
     }
 };
 
@@ -47,8 +46,8 @@ gulp.task('scripts', function() {
     return gulp.src([
         // Note: you need to explicitly list your scripts here in the right order
         //       to be correctly concatenated
-        paths.scripts.src + '/vendor/*.js',
-        paths.scripts.src + '/*.js'
+        paths.scripts.input + '/vendor/*.js',
+        paths.scripts.input + '/*.js'
     ])
     .pipe(concat('bundle.js'))
     .pipe(uglify())
@@ -58,7 +57,7 @@ gulp.task('scripts', function() {
 
 // Copy all static files.
 gulp.task('copy', function() {
-    return gulp.src(paths.static.src + '/**/*', {
+    return gulp.src(paths.static.input + '/**/*', {
         dot: true
     })
     .pipe(gulp.dest(paths.static.output))
@@ -92,7 +91,7 @@ gulp.task('styles', function() {
         require('postcss-reporter')({ clearMessages: true }),
     ];
 
-    return gulp.src(paths.styles.src + '/*.css')
+    return gulp.src(paths.styles.input + '/*.css')
     .pipe(postcss(processors))
     .pipe(nano())
     .pipe(gulp.dest(paths.styles.output))
@@ -115,7 +114,7 @@ gulp.task('icons', function() {
         }
     };
 
-    return gulp.src(paths.icons.src + '/**/*.svg')
+    return gulp.src(paths.icons.input + '/**/*.svg')
     .pipe(svgSprite(svgConfig))
     .pipe(gulp.dest(paths.icons.output))
     .pipe(size({ gzip: true, showFiles: false, title:'icons' }));
@@ -123,7 +122,7 @@ gulp.task('icons', function() {
 
 // Optimize images.
 gulp.task('images', function() {
-    return gulp.src(paths.images.src + '/**/*')
+    return gulp.src(paths.images.input + '/**/*')
     .pipe(imagemin({
         progressive: true,
         interlaced: true
@@ -138,14 +137,15 @@ gulp.task('watch', function() {
         notify: false,
         logLevel: 'silent',
         logPrefix: 'BS',
-        server: paths.watch.dir,
+        server: paths.watch.output,
         port: 8000
     });
 
-    gulp.watch([paths.scripts.src + '/**/*'], ['scripts'], reload);
-    gulp.watch([paths.styles.src + '/**/*'], ['styles'], reload);
-    gulp.watch([paths.icons.src + '/**/*.svg'], ['icons'], reload);
-    gulp.watch([paths.images.src + '/**/*'], ['images'], reload);
+    gulp.watch([paths.scripts.input + '/**/*'], ['scripts']);
+    gulp.watch([paths.styles.input + '/**/*'], ['styles']);
+    gulp.watch([paths.icons.input + '/**/*'], ['icons']);
+    gulp.watch([paths.images.input + '/**/*'], ['images']);
+    gulp.watch([paths.watch.output + '/**/*'], reload);
 });
 
 var buildTasks = [
@@ -172,14 +172,12 @@ gulp.task('build:watch', [], function(cb) {
 
 // Clean output directories.
 gulp.task('clean', function() {
-    require('del')([
+    require('del').sync([
         paths.scripts.output,
         paths.styles.output,
         paths.icons.output,
         paths.images.output
-    ]).then(function(paths) {
-        console.log('Deleted files/folders:\n', paths.join('\n'));
-    });
+    ]);
 });
 
 gulp.task('default', ['build']);

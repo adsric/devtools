@@ -1,3 +1,3 @@
 # Automation
 
-> Automation for repetitive frontend tasks with Gulp.
+> Automation for repetitive frontend tasks with GulpJS.
