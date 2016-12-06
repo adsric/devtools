@@ -1,3 +1,3 @@
-# Automation
+# Optimizer
 
-> Automation for repetitive frontend tasks with GulpJS.
+> Optimization for repetitive front-end tasks using GulpJS.
