@@ -15,57 +15,21 @@ var uglify = require('gulp-uglify');
 
 var reload = browserSync.reload;
 
-var paths = {
-    scripts: {
-        input: '',
-        output: ''
-    },
-    static: {
-        input: '',
-        output: ''
-    },
-    styles: {
-        input: '',
-        output: ''
-    },
-    icons: {
-        input: '',
-        output: ''
-    },
-    images: {
-        input: '',
-        output: ''
-    },
-    watch: {
-        output: ''
-    }
-};
-
 // Concatenate and minify JavaScript.
-gulp.task('scripts', function() {
+gulp.task('javascripts', function() {
     return gulp.src([
         // Note: you need to explicitly list your scripts here in the right order
         //       to be correctly concatenated
-        paths.scripts.input + '/vendor/*.js',
-        paths.scripts.input + '/*.js'
+        'javascripts/src/*.js'
     ])
-    .pipe(concat('bundle.js'))
+    .pipe(concat('bundle.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest(paths.scripts.output))
-    .pipe(size({ gzip: true, showFiles: true, title:'scripts' }));
-});
-
-// Copy all static files.
-gulp.task('copy', function() {
-    return gulp.src(paths.static.input + '/**/*', {
-        dot: true
-    })
-    .pipe(gulp.dest(paths.static.output))
-    .pipe(size({ title: 'copy' }));
+    .pipe(gulp.dest('javascripts/dist'))
+    .pipe(size({ gzip: true, showFiles: true, title:'javascripts' }));
 });
 
 // Compile and automatically prefix stylesheets.
-gulp.task('styles', function() {
+gulp.task('stylesheets', function() {
     var cssprefixes = [
         'Android 2.3',
         'Android >= 4',
@@ -84,27 +48,25 @@ gulp.task('styles', function() {
 
     var processors = [
         require('postcss-import')(),
-        require('postcss-custom-properties')(),
-        require('postcss-custom-media')(),
-        require('postcss-calc')(),
         autoprefixer({ browsers: cssprefixes }),
         require('postcss-reporter')({ clearMessages: true }),
     ];
 
-    return gulp.src(paths.styles.input + '/*.css')
+    return gulp.src('stylesheets/src/*')
     .pipe(postcss(processors))
     .pipe(nano())
-    .pipe(gulp.dest(paths.styles.output))
-    .pipe(size({ gzip: true, showFiles: true, title:'styles' }));
+    .pipe(rename({ suffix: ".min" }))
+    .pipe(gulp.dest('stylesheets/dist'))
+    .pipe(size({ gzip: true, showFiles: true, title:'stylesheets' }));
 });
 
 // Generate SVG sprites
-gulp.task('icons', function() {
+gulp.task('svg', function() {
     var svgConfig = {
         mode: {
             symbol: { // symbol mode to build the SVG
                 dest: '', // destination folder
-                sprite: 'icons.svg', // sprite name
+                sprite: 'sprite.svg', // sprite name
                 example: true // build sample page
             }
         },
@@ -114,20 +76,20 @@ gulp.task('icons', function() {
         }
     };
 
-    return gulp.src(paths.icons.input + '/**/*.svg')
+    return gulp.src('svg/src/**/*.svg')
     .pipe(svgSprite(svgConfig))
-    .pipe(gulp.dest(paths.icons.output))
-    .pipe(size({ gzip: true, showFiles: false, title:'icons' }));
+    .pipe(gulp.dest('svg/dist'))
+    .pipe(size({ gzip: true, showFiles: false, title:'svg' }));
 });
 
 // Optimize images.
 gulp.task('images', function() {
-    return gulp.src(paths.images.input + '/**/*')
+    return gulp.src('images/src/**/*')
     .pipe(imagemin({
         progressive: true,
         interlaced: true
     }))
-    .pipe(gulp.dest(paths.images.output))
+    .pipe(gulp.dest('images/dist'))
     .pipe(size({ gzip: true, showFiles: false, title:'images' }));
 });
 
@@ -137,21 +99,21 @@ gulp.task('watch', function() {
         notify: false,
         logLevel: 'silent',
         logPrefix: 'BS',
-        server: paths.watch.output,
+        server: '/',
         port: 8000
     });
 
-    gulp.watch([paths.scripts.input + '/**/*'], ['scripts']);
-    gulp.watch([paths.styles.input + '/**/*'], ['styles']);
-    gulp.watch([paths.icons.input + '/**/*'], ['icons']);
-    gulp.watch([paths.images.input + '/**/*'], ['images']);
-    gulp.watch([paths.watch.output + '/**/*'], reload);
+    gulp.watch(['javascripts/src/**/*'], ['javascripts']);
+    gulp.watch(['stylesheets/src/**/*'], ['stylesheets']);
+    gulp.watch(['svg/src/**/*'], ['svg']);
+    gulp.watch(['image/src/**/*'], ['images']);
+    gulp.watch(['/**/*'], reload);
 });
 
 var buildTasks = [
-    'scripts',
-    'styles',
-    'icons',
+    'javascripts',
+    'stylesheets',
+    'svg',
     'images'
 ];
 
@@ -168,16 +130,6 @@ gulp.task('build:watch', [], function(cb) {
         buildTasks,
         'watch',
     cb);
-});
-
-// Clean output directories.
-gulp.task('clean', function() {
-    require('del').sync([
-        paths.scripts.output,
-        paths.styles.output,
-        paths.icons.output,
-        paths.images.output
-    ]);
 });
 
 gulp.task('default', ['build']);
