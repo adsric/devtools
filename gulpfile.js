@@ -8,7 +8,6 @@ var imagemin = require('gulp-imagemin');
 var nano = require('gulp-cssnano');
 var postcss = require('gulp-postcss');
 var rename = require('gulp-rename');
-var runSequence = require('run-sequence');
 var size = require('gulp-size');
 var svgSprite = require('gulp-svg-sprite');
 var uglify = require('gulp-uglify');
@@ -94,20 +93,22 @@ gulp.task('images', function() {
 });
 
 // Watch files for changes & reload.
-gulp.task('watch', function() {
+gulp.task('watch', ['build'], function() {
     browserSync.init({
         notify: false,
         logLevel: 'silent',
         logPrefix: 'BS',
-        server: './',
+        server: {
+            baseDir: "./"
+        },
         port: 8000
     });
 
+    gulp.watch(['./**/*.html'], reload);
     gulp.watch(['javascripts/src/**/*'], ['javascripts']);
     gulp.watch(['stylesheets/src/**/*'], ['stylesheets']);
     gulp.watch(['svg/src/**/*'], ['svg']);
     gulp.watch(['image/src/**/*'], ['images']);
-    gulp.watch(['/**/*'], reload);
 });
 
 var buildTasks = [
@@ -118,18 +119,9 @@ var buildTasks = [
 ];
 
 // Build production files, the default task.
-gulp.task('build', [], function(cb) {
-    runSequence(
-        buildTasks,
-    cb);
-});
+gulp.task('build', buildTasks);
 
 // Build production files, the default task.
-gulp.task('build:watch', [], function(cb) {
-    runSequence(
-        buildTasks,
-        'watch',
-    cb);
-});
+gulp.task('build:watch', ['watch']);
 
 gulp.task('default', ['build']);
