@@ -99,7 +99,7 @@ gulp.task('watch', function() {
         notify: false,
         logLevel: 'silent',
         logPrefix: 'BS',
-        server: '/',
+        server: './',
         port: 8000
     });
 
