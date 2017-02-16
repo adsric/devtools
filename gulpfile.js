@@ -105,10 +105,10 @@ gulp.task('watch', ['build'], function() {
     });
 
     gulp.watch(['./**/*.html'], reload);
-    gulp.watch(['javascripts/src/**/*'], ['javascripts']);
-    gulp.watch(['stylesheets/src/**/*'], ['stylesheets']);
-    gulp.watch(['svg/src/**/*'], ['svg']);
-    gulp.watch(['image/src/**/*'], ['images']);
+    gulp.watch(['javascripts/src/**/*'], ['javascripts', reload]);
+    gulp.watch(['stylesheets/src/**/*'], ['stylesheets', reload]);
+    gulp.watch(['svg/src/**/*'], ['svg', reload]);
+    gulp.watch(['image/src/**/*'], ['images', reload]);
 });
 
 var buildTasks = [
