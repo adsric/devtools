@@ -7,7 +7,6 @@ var concat = require('gulp-concat');
 var imagemin = require('gulp-imagemin');
 var nano = require('gulp-cssnano');
 var postcss = require('gulp-postcss');
-var rename = require('gulp-rename');
 var size = require('gulp-size');
 var svgSprite = require('gulp-svg-sprite');
 var uglify = require('gulp-uglify');
@@ -21,9 +20,9 @@ gulp.task('javascripts', function() {
         //       to be correctly concatenated
         'javascripts/src/*.js'
     ])
-    .pipe(concat('bundle.min.js'))
+    .pipe(concat('bundle.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('javascripts/dist'))
+    .pipe(gulp.dest('javascripts/min'))
     .pipe(size({ gzip: true, showFiles: true, title:'javascripts' }));
 });
 
@@ -54,8 +53,7 @@ gulp.task('stylesheets', function() {
     return gulp.src('stylesheets/src/*')
     .pipe(postcss(processors))
     .pipe(nano())
-    .pipe(rename({ suffix: ".min" }))
-    .pipe(gulp.dest('stylesheets/dist'))
+    .pipe(gulp.dest('stylesheets/min'))
     .pipe(size({ gzip: true, showFiles: true, title:'stylesheets' }));
 });
 
@@ -77,7 +75,7 @@ gulp.task('svg', function() {
 
     return gulp.src('svg/src/**/*.svg')
     .pipe(svgSprite(svgConfig))
-    .pipe(gulp.dest('svg/dist'))
+    .pipe(gulp.dest('svg/min'))
     .pipe(size({ gzip: true, showFiles: false, title:'svg' }));
 });
 
@@ -88,7 +86,7 @@ gulp.task('images', function() {
         progressive: true,
         interlaced: true
     }))
-    .pipe(gulp.dest('images/dist'))
+    .pipe(gulp.dest('images/min'))
     .pipe(size({ gzip: true, showFiles: false, title:'images' }));
 });
 
