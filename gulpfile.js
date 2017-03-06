@@ -93,13 +93,24 @@ gulp.task('images', function() {
 // Watch files for changes & reload.
 gulp.task('watch', ['build'], function() {
     browserSync.init({
+        // Don't show any notifications in the browser.
         notify: false,
+        // Stop the browser from automatically opening
+        open: false,
+        // output NOTHING to the commandline
         logLevel: 'silent',
-        logPrefix: 'BS',
+        // Serve files from the base directory
         server: {
             baseDir: "./"
         },
-        port: 8000
+        // Server port change
+        port: 8000,
+        // user-interface port change
+        ui: {
+            port: 8080
+        },
+        // watch the files.
+        files: ["./stylesheets/min/*.css", "./javascripts/min/*.js", "./images/min/**/*"]
     });
 
     gulp.watch(['./**/*.html'], reload);
