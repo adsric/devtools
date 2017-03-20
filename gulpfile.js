@@ -28,9 +28,9 @@ gulp.task('lint:javascripts', function() {
         'javascripts/src/*.js',
         '!node_modules/**'
     ])
-    .pipe(.eslint())
-    .pipe(.eslint.format())
-    .pipe(.eslint.failAfterError());
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
 // Concatenate and minify JavaScript
