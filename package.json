@@ -12,7 +12,7 @@
         "gulp-eslint": "^3.0.1",
         "gulp-imagemin": "^3.1.1",
         "gulp-postcss": "^6.3.0",
-        "gulp-size": "^2.1.0",
+        "gulp-rename": "^1.2.2",
         "gulp-svg-sprite": "^1.3.6",
         "gulp-uglify": "^2.1.0",
         "postcss-import": "^9.1.0"
@@ -31,8 +31,8 @@
     "private": true,
     "scripts": {
         "build": "gulp build",
-        "watch": "gulp build:watch",
-        "setup": "npm install && mkdir -p javascripts/src && mkdir -p javascripts/vendor && mkdir -p stylesheets/src && mkdir -p svg/src && mkdir -p images/src",
+        "watch": "gulp watch",
+        "setup": "npm install && mkdir -p scripts/src && mkdir -p scripts/vendor && mkdir -p styles/src && mkdir -p svg/src && mkdir -p images/src",
         "start": "npm run build"
     }
 }

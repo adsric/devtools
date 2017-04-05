@@ -1,6 +1,6 @@
-# GulpKit
+# Dev Kit
 
-Automate and enhance your workflow with GulpKit.
+Automate and enhance your workflow with Dev Kit.
 
 ## Features
 
@@ -16,7 +16,7 @@ Automate and enhance your workflow with GulpKit.
 
 ## Browser Support
 
-At present, GulpKit officially supports the last two versions of the following browsers:
+At present, Dev Kit officially supports the last two versions of the following browsers:
 
 * Chrome
 * Edge
@@ -25,4 +25,4 @@ At present, GulpKit officially supports the last two versions of the following b
 * Opera
 * Internet Explorer 9+
 
-This is not to say that it cannot be used with browsers older than those reflected, but merely that GulpKit's focus will be on ensuring our layouts work great in the above.
+This is not to say that it cannot be used with browsers older than those reflected, but merely that Dev Kit's focus will be on ensuring our layouts work great in the above.

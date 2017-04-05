@@ -9,23 +9,27 @@ var eslint = require('gulp-eslint');
 var imagemin = require('gulp-imagemin');
 var nano = require('gulp-cssnano');
 var postcss = require('gulp-postcss');
-var size = require('gulp-size');
+var rename = require('gulp-rename');
 var svgSprite = require('gulp-svg-sprite');
 var uglify = require('gulp-uglify');
 
 var reload = browserSync.reload;
 
-// Lint, Concatenate and minify all Javascript
-gulp.task('javascripts', [
-    'lint:javascripts',
-    'javascripts:vendor',
-    'javascripts:main'
-]);
+// Optimize images.
+gulp.task('images', function() {
+    return gulp.src('images/src/**/*')
+    .pipe(imagemin({
+        progressive: true,
+        interlaced: true
+    }))
+    .pipe(gulp.dest('images/dist'))
+    .pipe(browserSync.stream());
+});
 
 // Lint JavaScript
-gulp.task('lint:javascripts', function() {
+gulp.task('lint:scripts', function() {
     return gulp.src([
-        'javascripts/src/*.js',
+        'scripts/src/*.js',
         '!node_modules/**'
     ])
     .pipe(eslint())
@@ -33,36 +37,8 @@ gulp.task('lint:javascripts', function() {
     .pipe(eslint.failAfterError());
 });
 
-// Concatenate and minify JavaScript
-gulp.task('javascripts:vendor', function() {
-    return gulp.src([
-        // Note: you need to explicitly list your scripts here in the right order
-        //       to be correctly concatenated
-        'javascripts/vendor/*.js'
-    ])
-    .pipe(concat('vendor.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('javascripts/min'))
-    .pipe(size({gzip: true, showFiles: true, title:'javascripts (vendor)'}));
-});
-
-// Optionally transpiles ES2015 code to ES5. to enable ES2015 support
-// uncomment the line `.pipe(babel())`
-gulp.task('javascripts:main', function() {
-    return gulp.src([
-        // Note: you need to explicitly list your scripts here in the right order
-        //       to be correctly concatenated
-        'javascripts/src/*.js'
-    ])
-    //.pipe(babel())
-    .pipe(concat('bundle.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('javascripts/min'))
-    .pipe(size({gzip: true, showFiles: true, title:'javascripts (main)'}));
-});
-
 // Compile and automatically prefix stylesheets
-gulp.task('stylesheets', function() {
+gulp.task('styles', function() {
     var cssprefixes = [
         'Android 2.3',
         'Android >= 4',
@@ -84,11 +60,52 @@ gulp.task('stylesheets', function() {
         autoprefixer({browsers: cssprefixes})
     ];
 
-    return gulp.src('stylesheets/src/*')
-    .pipe(postcss(processors))
+    return gulp.src('styles/src/*')
+    .pipe(postcss(processors)
+        .on('error', function(error) {
+              console.error(error.message);
+              this.emit('end');
+        })
+    )
     .pipe(nano())
-    .pipe(gulp.dest('stylesheets/min'))
-    .pipe(size({gzip: true, showFiles: true, title:'stylesheets'}));
+    .pipe(rename('main.min.css'))
+    .pipe(gulp.dest('styles/dist'))
+    .pipe(browserSync.stream({match: '**/*.css'}));
+});
+
+// Concatenate and minify all JavaScript
+gulp.task('scripts', [
+    'scripts:vendor',
+    'scripts:main'
+]);
+
+// Concatenate and minify JavaScript
+gulp.task('scripts:vendor', function() {
+    return gulp.src([
+        // Note: you need to explicitly list your scripts here in the right order
+        //       to be correctly concatenated
+        'scripts/vendor/*.js'
+    ])
+    .pipe(concat('vendor.js'))
+    .pipe(uglify())
+    .pipe(rename('vendor.min.js'))
+    .pipe(gulp.dest('scripts/dist'))
+});
+
+// Optionally transpiles ES2015 code to ES5. to enable ES2015 support
+// uncomment the line `.pipe(babel())`
+gulp.task('scripts:main', function() {
+    return gulp.src([
+        // Note: you need to explicitly list your scripts here in the right order
+        //       to be correctly concatenated
+        'scripts/src/*.js'
+    ])
+    //.pipe(babel())
+    .pipe(concat('bundle.js'))
+    .pipe(uglify())
+    .pipe(rename('bundle.min.js'))
+    .pipe(gulp.dest('scripts/dist'))
+    .pipe(browserSync.stream());
 });
 
 // Generate SVG sprites
@@ -97,8 +114,9 @@ gulp.task('svg', function() {
         mode: {
             symbol: { // symbol mode to build the SVG
                 dest: '', // destination folder
-                sprite: 'sprite.svg', // sprite name
-                example: true // build sample page
+                example: false, // build sample page
+                inline: true, // inline preparing
+                sprite: 'sprite.svg' // sprite name
             }
         },
         svg: {
@@ -109,23 +127,14 @@ gulp.task('svg', function() {
 
     return gulp.src('svg/src/**/*.svg')
     .pipe(svgSprite(svgConfig))
-    .pipe(gulp.dest('svg/min'))
-    .pipe(size({gzip: true, showFiles: false, title:'svg'}));
+    .pipe(gulp.dest('svg/dist'))
+    .pipe(browserSync.stream());
 });
 
-// Optimize images.
-gulp.task('images', function() {
-    return gulp.src('images/src/**/*')
-    .pipe(imagemin({
-        progressive: true,
-        interlaced: true
-    }))
-    .pipe(gulp.dest('images/min'))
-    .pipe(size({gzip: true, showFiles: false, title:'images'}));
-});
-
-// Watch files for changes & reload.
+// Build + Watch files for changes & reload.
 gulp.task('watch', ['build'], function() {
+    // Initialise BrowserSync
+    console.log('Starting BrowserSync...');
     browserSync.init({
         // Don't show any notifications in the browser.
         notify: false,
@@ -140,29 +149,23 @@ gulp.task('watch', ['build'], function() {
         // user-interface port change
         ui: {
             port: 8080
-        },
-        // watch the files.
-        files: ['./stylesheets/min/*.css', './javascripts/min/*.js', './images/min/**/*']
+        }
     });
-
-    gulp.watch(['./**/*.html'], reload);
-    gulp.watch(['javascripts/src/**/*'], ['javascripts', reload]);
-    gulp.watch(['stylesheets/src/**/*'], ['stylesheets', reload]);
+    gulp.watch(['scripts/src/**/*'], ['scripts', reload]);
+    gulp.watch(['styles/src/**/*'], ['styles', reload]);
     gulp.watch(['svg/src/**/*'], ['svg', reload]);
     gulp.watch(['image/src/**/*'], ['images', reload]);
 });
 
 var buildTasks = [
-    'javascripts',
-    'stylesheets',
+    'lint:scripts',
+    'scripts',
+    'styles',
     'svg',
     'images'
 ];
 
 // Build production files, the default task.
 gulp.task('build', buildTasks);
-
-// Build production files and watch for changes.
-gulp.task('build:watch', ['watch']);
 
 gulp.task('default', ['build']);
