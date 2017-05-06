@@ -5,7 +5,6 @@ var autoprefixer = require('autoprefixer');
 var babel = require('gulp-babel');
 var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
-var eslint = require('gulp-eslint');
 var imagemin = require('gulp-imagemin');
 var nano = require('gulp-cssnano');
 var postcss = require('gulp-postcss');
@@ -24,17 +23,6 @@ gulp.task('images', function() {
     }))
     .pipe(gulp.dest('images/dist'))
     .pipe(browserSync.stream());
-});
-
-// Lint JavaScript
-gulp.task('lint:scripts', function() {
-    return gulp.src([
-        'scripts/src/*.js',
-        '!node_modules/**'
-    ])
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
 });
 
 // Compile and automatically prefix stylesheets
@@ -154,11 +142,10 @@ gulp.task('watch', ['build'], function() {
     gulp.watch(['scripts/src/**/*'], ['scripts', reload]);
     gulp.watch(['styles/src/**/*'], ['styles', reload]);
     gulp.watch(['svg/src/**/*'], ['svg', reload]);
-    gulp.watch(['image/src/**/*'], ['images', reload]);
+    gulp.watch(['images/src/**/*'], ['images', reload]);
 });
 
 var buildTasks = [
-    'lint:scripts',
     'scripts',
     'styles',
     'svg',
