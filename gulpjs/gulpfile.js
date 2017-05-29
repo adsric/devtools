@@ -5,7 +5,6 @@ var autoprefixer = require('autoprefixer');
 var babel = require('gulp-babel');
 var browserSync = require('browser-sync').create();
 var concat = require('gulp-concat');
-var imagemin = require('gulp-imagemin');
 var nano = require('gulp-cssnano');
 var postcss = require('gulp-postcss');
 var rename = require('gulp-rename');
@@ -13,17 +12,6 @@ var svgSprite = require('gulp-svg-sprite');
 var uglify = require('gulp-uglify');
 
 var reload = browserSync.reload;
-
-// Optimize images.
-gulp.task('images', function() {
-    return gulp.src('images/src/**/*')
-    .pipe(imagemin({
-        progressive: true,
-        interlaced: true
-    }))
-    .pipe(gulp.dest('images/dist'))
-    .pipe(browserSync.stream());
-});
 
 // Compile and automatically prefix stylesheets
 gulp.task('styles', function() {
@@ -56,7 +44,7 @@ gulp.task('styles', function() {
         })
     )
     .pipe(nano())
-    .pipe(rename('main.min.css'))
+    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('styles/dist'))
     .pipe(browserSync.stream({match: '**/*.css'}));
 });
@@ -76,7 +64,7 @@ gulp.task('scripts:vendor', function() {
     ])
     .pipe(concat('vendor.js'))
     .pipe(uglify())
-    .pipe(rename('vendor.min.js'))
+    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('scripts/dist'))
 });
 
@@ -91,7 +79,7 @@ gulp.task('scripts:main', function() {
     //.pipe(babel())
     .pipe(concat('bundle.js'))
     .pipe(uglify())
-    .pipe(rename('bundle.min.js'))
+    .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest('scripts/dist'))
     .pipe(browserSync.stream());
 });
@@ -142,14 +130,12 @@ gulp.task('watch', ['build'], function() {
     gulp.watch(['scripts/src/**/*'], ['scripts', reload]);
     gulp.watch(['styles/src/**/*'], ['styles', reload]);
     gulp.watch(['svg/src/**/*'], ['svg', reload]);
-    gulp.watch(['images/src/**/*'], ['images', reload]);
 });
 
 var buildTasks = [
     'scripts',
     'styles',
-    'svg',
-    'images'
+    'svg'
 ];
 
 // Build production files, the default task.
