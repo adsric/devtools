@@ -1,9 +1,9 @@
 import data from './data';
 import { multiply } from './utils';
 
-import './styles/main.scss';
-import prudenceImg from './images/prudence.jpg';
-import webpackImg from './images/webpack.jpg';
+import '../styles/main.scss';
+import prudenceImg from '../images/prudence.jpg';
+import webpackImg from '../images/webpack.jpg';
 
 const app = document.getElementById('app');
 app.innerHTML = `
