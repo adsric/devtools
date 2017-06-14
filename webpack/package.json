@@ -37,6 +37,6 @@
 	"private": true,
 	"scripts": {
 		"build": "rimraf dist && NODE_ENV=production webpack --config webpack.config.js",
-		"dev": "NODE_ENV=development node webpack.config.server.js"
+		"dev": "NODE_ENV=development node webpack.config.dev.js"
 	}
 }
