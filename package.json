@@ -35,7 +35,7 @@
 		"clean": "rimraf dist/{*.css,*.js,*.map}",
 		"cssnano": "postcss -u cssnano -d dist dist/*.css",
 		"hash:css": "hashmark -l 12 'dist/*.css' 'dist/{name}.{hash}.css' --silent",
-		"icons": "svg-sprite --config svg-sprite.json src/icons/*.svg",
+		"icons": "svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg",
 		"webpack:dev": "NODE_ENV=development webpack",
 		"webpack:build": "NODE_ENV=production webpack",
 		"serve": "browser-sync start --server --port 8000 --files \"dist/*.css, dist/*.js, **/*.html, !node_modules/**/*.html\"",

@@ -1,9 +1,7 @@
-# NPM Scripts
+# NPM Recipes
 
-Automate and enhance your workflow with npm.
+Automate and enhance your development workflow with npm.
 
 ## Features
 
-**svg-sprite** takes a bunch of SVG files, optimizes them and bakes them into SVG sprites using the <symbol> element.
-Configuration can be changed at [`sprite.json`](svg-sprite/config), for help see
-[online configurator](http://jkphl.github.io/svg-sprite/#json)
+**svg-sprite** takes a bunch of SVG files, optimizes them and bakes them into SVG sprites using the <symbol> element. Command line help can be changed at [docs](https://github.com/jkphl/svg-sprite/blob/master/docs/command-line.md)
