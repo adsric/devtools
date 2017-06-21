@@ -24,9 +24,9 @@ You're ready to go! Run any task by typing `npm run task` (where "task" is the n
 ## List of available tasks
 
 ### `autoprefixer`
-  `postcss -u autoprefixer --autoprefixer.browsers 'last 2 versions' -d dist src/css/*.css`
+  `postcss -u autoprefixer -d dist src/css/*.css`
 
-  Add vendor prefixes to your CSS automatically.
+  Add vendor prefixes to your CSS automatically. (see Browserlist in package.json for browser support)
 
 ### `clean`
   `rimraf dist/{*.css,*.js,*.map}`
