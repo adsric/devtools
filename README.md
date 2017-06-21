@@ -23,6 +23,11 @@ You're ready to go! Run any task by typing `npm run task` (where "task" is the n
 
 ## List of available tasks
 
+Please note the following:
+
+`run-s` (Run tasks in series)
+`run-p` (Run tasks in parallel)
+
 ### `autoprefixer`
   `postcss -u autoprefixer -d dist src/css/*.css`
 
@@ -69,27 +74,17 @@ You're ready to go! Run any task by typing `npm run task` (where "task" is the n
 ### `build:js`
   `run-s webpack:build`
 
-  Alias to run the `webpack:build` tasks. Bundles `src/js/app.js` & uglifies the output.
+  Alias to run the `webpack:build` tasks. Bundles `src/js/app.js` & minify the output.
 
 ### `build`
   `run-s build:*`
 
   Alias to run all of the `build` commands.
 
-### `dev:css`
-  `run-s autoprefixer`
-
-  Alias to run `autoprefixer`
-
-### `dev:js`
-  `run-s webpack:dev`
-
-  Alias to run `webpack:dev`
-
 ### `dev`
-  `run-p dev:* watch`
+  `run-s autoprefixer webpack:dev watch`
 
-  Alias to run all of the `dev` commands and watch task.
+  Alias to run `autoprefixer`, `webpack:dev` and `watch` tasks.
 
 ### `watch:css`
   `onchange \"src/css\" -- run-s build:css`
