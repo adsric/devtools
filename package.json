@@ -33,9 +33,6 @@
 		"> 1%",
 		"last 2 versions"
 	],
-	"jshintConfig": {
-		"esversion": 6
-	},
 	"scripts": {
 		"autoprefixer": "postcss -u autoprefixer -d dist src/css/*.css",
 		"clean": "rimraf dist/{*.css,*.js,*.map}",
