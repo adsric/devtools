@@ -74,7 +74,7 @@ Please note the following:
 ### `build:js`
   `run-s webpack:build`
 
-  Alias to run the `webpack:build` tasks. Bundles `src/js/app.js` & minify the output.
+  Alias to run the `webpack:build` tasks. Bundles `src/js/main.js` & minify the output.
 
 ### `build`
   `run-s build:*`

@@ -19,7 +19,7 @@ const plugins = ENV === 'production' ? [
 
 module.exports = {
 	entry: {
-		main: './src/js/app.js'
+		main: './src/js/main.js'
 	},
 	plugins,
 	devtool: ENV === 'production' ? 'cheap-module-source-map' : 'inline-source-map',
