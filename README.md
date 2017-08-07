@@ -9,7 +9,7 @@ Interact with your cli and tools directly without unnecessary abstractions like 
 * [List of available tasks](#list-of-available-tasks)
 
 ## List of packages used
-[autoprefixer](https://github.com/postcss/autoprefixer), [babel](https://github.com/babel/babel), [babel-loader](https://github.com/babel/babel-loader), [browser-sync](https://github.com/Browsersync/browser-sync), [cssnano](https://github.com/ben-eb/cssnano), [hashmark](https://github.com/keithamus/hashmark), [npm-run-all](https://github.com/mysticatea/npm-run-all), [onchange](https://github.com/Qard/onchange), [postcss-cli](https://github.com/code42day/postcss-cli) [rimraf](https://github.com/isaacs/rimraf), [svg-sprite](https://github.com/jkphl/svg-sprite), [webpack](https://github.com/webpack/webpack).
+[autoprefixer](https://github.com/postcss/autoprefixer), [babel](https://github.com/babel/babel), [babel-loader](https://github.com/babel/babel-loader), [browser-sync](https://github.com/Browsersync/browser-sync), [cssnano](https://github.com/ben-eb/cssnano), [hashmark](https://github.com/keithamus/hashmark), [npm-run-all](https://github.com/mysticatea/npm-run-all), [onchange](https://github.com/Qard/onchange), [postcss-cli](https://github.com/code42day/postcss-cli) [rimraf](https://github.com/isaacs/rimraf), [svg-sprite](https://github.com/jkphl/svg-sprite), [uglify-js](https://github.com/mishoo/UglifyJS2), [webpack](https://github.com/webpack/webpack).
 
 ## Using in your project
 * First, ensure that node.js & npm are both installed. If not, choose your OS and installation method from [this page](https://nodejs.org/en/download/package-manager/) and follow the instructions.
@@ -33,6 +33,11 @@ Please note the following:
 
   Add vendor prefixes to your CSS automatically. (see Browserlist in package.json for browser support)
 
+### `babel-js`
+  `babel src/js --out-dir .tmp`
+
+  Use next generation JavaScript, today. Allowing you to use new syntax, right now without waiting for browser support. (note Compiles down to supported version).
+
 ### `clean`
   `rimraf dist/{*.css,*.js,*.map}`
 
@@ -43,15 +48,20 @@ Please note the following:
 
   Minify production ready CSS.
 
-### `hash:css`
-  `hashmark -l 12 'dist/*.css' 'dist/{name}.{hash}.css' --silent`
+### `hash`
+  `hashmark -l 12 -r 'dist/*.{js,css}' 'dist/{name}.{hash}{ext}' --silent`
 
-  Add a md5 hash to the production ready CSS file.
+  Add a md5 hash to the production ready files. (note Remove js extension if using webpack)
 
 ### `icons`
   `svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg`
 
   Takes a bunch of SVG files, optimizes them and bakes them into SVG sprites using the <symbol> element. Command line help can be changed at [docs](https://github.com/jkphl/svg-sprite/blob/master/docs/command-line.md).
+
+### `uglify-js`
+  `uglifyjs .tmp/file1.js .tmp/file2.js -c -m -o dist/bundle.js && rimraf .tmp/*.js`
+
+  UglifyJS is a JavaScript parser, minifier, compressor and beautifier toolkit. Takes a bunch of JavaScript files, parse input files in sequence and apply any compression options into a single bundle file.
 
 ### `webpack:dev`
 
@@ -69,12 +79,12 @@ Please note the following:
 ### `build:css`
   `run-s autoprefixer cssnano hash:css`
 
-  Alias to run the `autoprefixer`, `cssnano` and `hash:css` tasks.
+  Alias to run the `autoprefixer`, `cssnano` and `hash` tasks.
 
 ### `build:js`
   `run-s webpack:build`
 
-  Alias to run the `webpack:build` tasks. Bundles `src/js/main.js` & minify the output.
+  Alias to run the `webpack:build` tasks. Bundles `src/js/main.js` & minify the output. (note Not using webpack then add babel-js uglify-js to this command instead)
 
 ### `build`
   `run-s build:*`
@@ -94,7 +104,7 @@ Please note the following:
 ### `watch:js`
   `onchange \"src/js\" -- run-s webpack:dev`
 
-  Watches for any .js file in `src` to change, then runs the `dev:js` task.
+  Watches for any .js file in `src` to change, then runs the `dev:js` task. (note Not using webpack then add build:js to this command instead)
 
 ### `watch:images`
   `onchange 'src/images/**/*' -- run-s build:images`
