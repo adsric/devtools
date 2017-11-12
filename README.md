@@ -56,8 +56,6 @@ Please note the following:
 ### `icons`
   `svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg`
 
-  Takes a bunch of SVG files, optimizes them and bakes them into SVG sprites using the <symbol> element. Command line help can be changed at [docs](https://github.com/jkphl/svg-sprite/blob/master/docs/command-line.md).
-
 ### `uglify-js`
   `uglifyjs .tmp/file1.js .tmp/file2.js -c -m -o dist/bundle.js && rimraf .tmp/*.js`
 
@@ -117,6 +115,6 @@ Please note the following:
   Run the following tasks simultaneously: `serve`, `watch:css` & `watch:js`. When a .css or .js file changes in `src`, the task will compile the changes to `dist`, and the server will be notified of the change. Any browser connected to the server will then inject the new file from `dist`
 
 ### `setup`
-  `npm install && mkdir -p src/css && mkdir -p src/js && mkdir -p src/icons`
+  `npm install && mkdir -p src/css && mkdir -p src/js`
 
   Install all dependences and creates the `src` directory structure.
