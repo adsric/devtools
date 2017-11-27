@@ -1,6 +1,6 @@
 {
-	"name": "npm-it",
-	"description": "npm recipes to automate with cli tools.",
+	"name": "npm-tasks",
+	"description": "npm cli scripts as a task runner.",
 	"version": "1.0.0",
 	"private": true,
 	"scripts": {
