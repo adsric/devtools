@@ -31,7 +31,9 @@ The list of the packages used for the tasks available.
 
 * [autoprefixer](https://github.com/postcss/autoprefixer)
 * [babel](https://github.com/babel/babel)
+* [babel-cli](https://github.com/babel/babel/tree/master/packages/babel-cli)
 * [babel-loader](https://github.com/babel/babel-loader)
+* [babel-preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env)
 * [browser-sync](https://github.com/Browsersync/browser-sync)
 * [cssnano](https://github.com/ben-eb/cssnano)
 * [hashmark](https://github.com/keithamus/hashmark)
