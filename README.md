@@ -51,12 +51,7 @@ The list of the packages used for the tasks available.
 
 The list of tasks available.
 
-### Task - `autoprefixer`
-  `postcss -u autoprefixer -d dist src/css/*.css`
-
-  Add vendor prefixes to your CSS automatically. (see Browserlist in package.json for browser support)
-
-### Task - `babel-js`
+### Task - `babel:js`
   `babel src/js --out-dir .tmp`
 
   Use next generation JavaScript, today. Allowing you to use new syntax, right now without waiting for browser support. (note Compiles down to supported version).
@@ -66,11 +61,6 @@ The list of tasks available.
 
   Delete existing dist files.
 
-### Task - `cssnano`
-  `postcss -u cssnano -d dist dist/*.css`
-
-  Minify production ready CSS.
-
 ### Task - `hash`
   `hashmark -l 12 -r 'dist/*.{js,css}' 'dist/{name}.{hash}{ext}' --silent`
 
@@ -79,7 +69,17 @@ The list of tasks available.
 ### Task - `icons`
   `svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg`
 
-### Task - `uglify-js`
+### Task - `minify:css`
+  `postcss -u cssnano -d dist dist/*.css`
+
+  Minify production ready CSS.
+
+### Task - `prefix:css`
+  `postcss -u autoprefixer -d dist src/css/*.css`
+
+  Add vendor prefixes to your CSS automatically. (see Browserlist in package.json for browser support)
+
+### Task - `uglify:js`
   `uglifyjs .tmp/file1.js .tmp/file2.js -c -m -o dist/bundle.js && rimraf .tmp/*.js`
 
   UglifyJS is a JavaScript parser, minifier, compressor and beautifier toolkit. Takes a bunch of JavaScript files, parse input files in sequence and apply any compression options into a single bundle file.
@@ -98,14 +98,14 @@ The list of tasks available.
   Start a new server and watch for CSS & JS file changes in the `dist` folder.
 
 ### Task - `build:css`
-  `run-s autoprefixer cssnano hash:css`
+  `run-s prefix:css minify:css`
 
   Alias to run the `autoprefixer`, `cssnano` and `hash` tasks.
 
 ### Task - `build:js`
   `run-s webpack:build`
 
-  Alias to run the `webpack:build` tasks. Bundles `src/js/main.js` & minify the output. (note Not using webpack then add babel-js uglify-js to this command instead)
+  Alias to run the `webpack:build` tasks. Bundles `src/js/main.js` & minify the output. (note Not using webpack then add babel:js uglify:js to this command instead)
 
 ### Task - `build`
   `run-s build:*`
