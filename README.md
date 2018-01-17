@@ -57,12 +57,12 @@ The list of tasks available.
   Use next generation JavaScript, today. Allowing you to use new syntax, right now without waiting for browser support. (note Compiles down to supported version).
 
 ### Task - `clean`
-  `rimraf dist/{*.css,*.js,*.map}`
+  `rimraf dist/{*.css,**/*.css,*.js,**/*.js}`
 
   Delete existing dist files.
 
 ### Task - `hash`
-  `hashmark -l 12 -r 'dist/*.{js,css}' 'dist/{name}.{hash}{ext}' --silent`
+  `hashmark -l 12 -r 'dist/**/*.{js,css}' '{dir}/{name}.{hash}{ext}`
 
   Add a md5 hash to the production ready files. (note Remove js extension if using webpack)
 
@@ -70,12 +70,12 @@ The list of tasks available.
   `svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg`
 
 ### Task - `minify:css`
-  `postcss -u cssnano -d dist dist/*.css`
+  `postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp`
 
   Minify production ready CSS.
 
 ### Task - `prefix:css`
-  `postcss -u autoprefixer -d dist src/css/*.css`
+  `postcss -u autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css`
 
   Add vendor prefixes to your CSS automatically. (see Browserlist in package.json for browser support)
 
@@ -126,11 +126,6 @@ The list of tasks available.
   `onchange \"src/js\" -- run-s webpack:dev`
 
   Watches for any .js file in `src` to change, then runs the `dev:js` task. (note Not using webpack then add build:js to this command instead)
-
-### Task - `watch:images`
-  `onchange 'src/images/**/*' -- run-s build:images`
-
-  Watches for any images in `src` to change, then runs the `build:images` task.
 
 ### Task - `watch`
   `run-p serve watch:*`
