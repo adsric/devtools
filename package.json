@@ -1,27 +1,26 @@
 {
 	"name": "npm-tasks",
-	"description": "npm cli scripts as a task runner.",
-	"version": "1.0.0",
+	"description": "A npm task runner powered with cli scripts.",
 	"private": true,
 	"scripts": {
-		"babel:js": "babel src/js --out-dir .tmp",
+		"babel-js": "babel src/js --out-dir .tmp",
+		"browser-sync": "browser-sync start --server --files '**/*.css, **/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'",
 		"clean": "rimraf dist/{*.css,**/*.css,*.js,**/*.js}",
-		"hash": "hashmark -l 12 -r 'dist/**/*.{js,css}' '{dir}/{name}.{hash}{ext}' --silent",
-		"icons": "svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg",
+		"hash": "hashmark -l 12 -r 'dist/**/*.{css, js}' '{dir}/{name}.{hash}{ext}' --silent",
 		"minify:css": "postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp",
 		"prefix:css": "postcss -u autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css",
+		"svg:sprite": "svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/svg/*.svg",
 		"uglify:js": "uglifyjs .tmp/file1.js .tmp/file2.js -c -m -o dist/bundle.js && rimraf .tmp",
+		"watch:css": "onchange \"src/css\" -- run-s build:css",
+		"watch:js": "onchange \"src/js\" -- run-s webpack:dev",
+		"watch": "run-p serve watch:*",
 		"webpack:dev": "NODE_ENV=development webpack",
 		"webpack:build": "NODE_ENV=production webpack",
 		"setup": "npm install && mkdir -p src/css && mkdir -p src/js",
-		"serve": "browser-sync start --server --port 8000 --proxy 'localhost' --files 'dist/**/*'",
 		"build:css": "run-s prefix:css minify:css",
 		"build:js": "run-s webpack:build",
 		"build": "run-s clean build:* hash",
-		"dev": "run-s clean build:css webpack:dev watch",
-		"watch:css": "onchange \"src/css\" -- run-s build:css",
-		"watch:js": "onchange \"src/js\" -- run-s webpack:dev",
-		"watch": "run-p serve watch:*"
+		"dev": "run-s clean build:css webpack:dev watch"
 	},
 	"babel": {
 		"presets": [

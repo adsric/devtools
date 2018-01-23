@@ -1,16 +1,15 @@
 # npm tasks ✔️
 
-> npm cli scripts as a task runner
+> A npm task runner powered with cli scripts
 
 Use cli packages directly without unnecessary abstractions like Gulp and Grunt.
 
-* A task runner using npm scripts
 * Provides common recipes for automation
 * Runs commands locally
 
-## Documentation
+## Table of Contents
 
-* [How to setup](#setup)
+* [Setup](#setup)
 * [Packages](#packages)
 * [Tasks](#tasks)
 
@@ -47,92 +46,28 @@ The list of the packages used for the tasks available.
 
 ## Tasks
 
-(Note: `run-s` will run tasks in series, while `run-p` runs them in parallel)
+Below are the tasks available.
 
-The list of tasks available.
+> note: `run-s` will run tasks in series, while `run-p` runs them in parallel
 
-### Task - `babel:js`
-  `babel src/js --out-dir .tmp`
+> see: browserlist in package.json for browser support
 
-  Use next generation JavaScript, today. Allowing you to use new syntax, right now without waiting for browser support. (note Compiles down to supported version).
-
-### Task - `clean`
-  `rimraf dist/{*.css,**/*.css,*.js,**/*.js}`
-
-  Delete existing dist files.
-
-### Task - `hash`
-  `hashmark -l 12 -r 'dist/**/*.{js,css}' '{dir}/{name}.{hash}{ext}`
-
-  Add a md5 hash to the production ready files. (note Remove js extension if using webpack)
-
-### Task - `icons`
-  `svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg`
-
-### Task - `minify:css`
-  `postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp`
-
-  Minify production ready CSS.
-
-### Task - `prefix:css`
-  `postcss -u autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css`
-
-  Add vendor prefixes to your CSS automatically. (see Browserlist in package.json for browser support)
-
-### Task - `uglify:js`
-  `uglifyjs .tmp/file1.js .tmp/file2.js -c -m -o dist/bundle.js && rimraf .tmp/*.js`
-
-  UglifyJS is a JavaScript parser, minifier, compressor and beautifier toolkit. Takes a bunch of JavaScript files, parse input files in sequence and apply any compression options into a single bundle file.
-
-### Task - `webpack:dev`
-
-  A production ready bundle of JavaScript.
-
-### Task - `webpack:build`
-
-  Uglify (minify) a production ready bundle of JavaScript with sourcemaps.
-
-### Task - `serve`
-  `browser-sync start --server --files 'dist/css/*.css, dist/js/*.js, **/*.html, !node_modules/**/*.html'`
-
-  Start a new server and watch for CSS & JS file changes in the `dist` folder.
-
-### Task - `build:css`
-  `run-s prefix:css minify:css`
-
-  Alias to run the `autoprefixer`, `cssnano` and `hash` tasks.
-
-### Task - `build:js`
-  `run-s webpack:build`
-
-  Alias to run the `webpack:build` tasks. Bundles `src/js/main.js` & minify the output. (note Not using webpack then add babel:js uglify:js to this command instead)
-
-### Task - `build`
-  `run-s build:*`
-
-  Alias to run all of the `build` commands.
-
-### Task - `dev`
-  `run-s autoprefixer webpack:dev watch`
-
-  Alias to run `autoprefixer`, `webpack:dev` and `watch` tasks.
-
-### Task - `watch:css`
-  `onchange \"src/css\" -- run-s build:css`
-
-  Watches for any .css file in `src` to change, then runs the `dev:css` task.
-
-### Task - `watch:js`
-  `onchange \"src/js\" -- run-s webpack:dev`
-
-  Watches for any .js file in `src` to change, then runs the `dev:js` task. (note Not using webpack then add build:js to this command instead)
-
-### Task - `watch`
-  `run-p serve watch:*`
-
-  Run the following tasks simultaneously: `serve`, `watch:css` & `watch:js`. When a .css or .js file changes in `src`, the task will compile the changes to `dist`, and the server will be notified of the change. Any browser connected to the server will then inject the new file from `dist`
-
-### Task - `setup`
-  `npm install && mkdir -p src/css && mkdir -p src/js`
-
-  Install all dependences and creates the `src` directory structure.
+| cmd | recipe | description |
+|:---:|:---|:---|
+| `babel-js` | `babel src/js --out-dir .tmp` | Compile browser-compatible JavaScript from next generation |
+| `browser-sync` |  `browser-sync start --server --files '**/*.css, **/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'` | Browser sync file changes on edit |
+| `clean` | `rimraf dist/{*.css,**/*.css,*.js,**/*.js}` | Delete compiled files |
+| `hash` | `hashmark -l 12 -r 'dist/**/*.{css,js}' '{dir}/{name}.{hash}{ext}` | Append a md5 hash to the compiled files (using webpack remove js ext) |
+| `minify:css` | `postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp` | Minify CSS files |
+| `prefix:css` | `postcss -u autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css` | Add vendor prefixes to CSS files |
+| `svg-sprite` | `svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/icons/*.svg` | Compile a svg sprite from svg files |
+| `uglify:js` | `uglifyjs .tmp/file1.js .tmp/file2.js -c -m -o dist/bundle.js && rimraf .tmp` | Takes a bunch of JavaScript files, parse the files in sequence and apply any compression options into a bundle file |
+| `watch:css` | `onchange \"src/css\" -- run-s build:css` | Watches for any .css file changes, then runs the cmd `build:css` |
+| `watch:js` | `onchange \"src/js\" -- run-s webpack:dev` | Watches for any .js file changes, then runs the cmd `webpack:dev` |
+| `watch` | `run-p browser-sync watch:*` | Runs the cmd `browser-sync`, `watch:css` and `watch:js` |
+| `webpack:dev` | `NODE_ENV=development webpack` | Bundle JavaScript with Webpack |
+| `webpack:build` | `NODE_ENV=production webpack` | Bundle and Uglify JavaScript with Webpack |
+| `build:css` | `run-s prefix:css minify:css` | Combines the cmd's  `prefix:css` and `minify:css` into a single cmd |
+| `build:js` | `run-s webpack:build` | Alias to run  `webpack:build` |
+| `build` | `run-s build:* hash` | Run all `build` cmd's and append a md5 hash |
+| `dev` | `run-s build:css webpack:dev watch` |  Alias to run `build:css`, `webpack:dev` and `watch` cmd's |
