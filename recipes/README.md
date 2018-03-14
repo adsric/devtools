@@ -1,4 +1,4 @@
-# Recipes → npm runner
+# Recipes → npm run
 
 The recipes are pre-configured `package.json` files that can be used as
 is for a new project or extended.

@@ -1,4 +1,4 @@
-# Uglify J️S → npm runner
+# Uglify J️S → npm run
 
 A recipe to combine listed JavaScript files into one JavaScript bundle and
 then minify the concatenated JavaScript bundle.

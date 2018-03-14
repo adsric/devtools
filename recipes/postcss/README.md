@@ -1,4 +1,4 @@
-# PostCSS → npm runner
+# PostCSS → npm run
 
 A recipe to prefix and minify Stylesheet files using PostCSS.
 

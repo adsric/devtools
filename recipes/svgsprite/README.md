@@ -1,4 +1,4 @@
-# SVG Sprite → npm runner
+# SVG Sprite → npm run
 
 A recipe to sprite a folder of svg files using symbol mode with the following package [svg-sprite](https://github.com/jkphl/svg-sprite).
 

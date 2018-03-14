@@ -1,4 +1,4 @@
-# Webpack → npm runner
+# Webpack → npm run
 
 A recipe to use webpack module bundler to bundle and minify JavaScript files.
 
