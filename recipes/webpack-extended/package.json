@@ -4,8 +4,8 @@
 	"private": true,
 	"scripts": {
 		"clean": "rimraf dist/{*.js,**/*.js,*.map,**/*.map}",
-		"webpack:dev": "webpack src/javascript/index.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.js' --watch",
-		"webpack:build": "webpack src/javascript/index.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.[hash].js'",
+		"webpack:dev": "webpack index=./src/javascript/index.js index2=./src/javascript/index2.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='[name].bundle.js' --watch",
+		"webpack:build": "webpack index=./src/javascript/index.js index2=./src/javascript/index2.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='[name].bundle.[hash].js'",
 		"setup": "npm install && mkdir -p src/javascript",
 		"build:js": "run-s webpack:build",
 		"build": "run-s clean build:*",
