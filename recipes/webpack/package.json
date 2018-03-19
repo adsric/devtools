@@ -1,15 +1,15 @@
 {
-	"name": "npm-runner",
-	"description": "A npm task runner powered with cli packages.",
+	"name": "npm-run",
+	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
 		"clean": "rimraf dist/{*.js,**/*.js,*.map,**/*.map}",
-		"webpack:dev": "webpack src/javascript/index.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.js' --watch",
-		"webpack:build": "webpack src/javascript/index.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.[hash].js'",
+		"webpack-dev": "webpack src/javascript/index.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.js' --watch",
+		"webpack-build": "webpack src/javascript/index.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.[hash].js'",
 		"setup": "npm install && mkdir -p src/javascript",
-		"build:js": "run-s webpack:build",
+		"build:js": "run-s webpack-build",
 		"build": "run-s clean build:*",
-		"dev": "run-s clean webpack:dev"
+		"dev": "run-s clean webpack-dev"
 	},
 	"babel": {
 		"presets": [

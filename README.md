@@ -1,6 +1,6 @@
 # npm run
 
-A npm run as a task runner powered with npm scripts, uses cli packages without the need for unnecessary
+Using npm run as a task runner powered with npm scripts, uses cli packages without the need for unnecessary
 abstractions like Gulp and Grunt.
 
 The repository provides [recipes](recipes) in which turns your `package.json` into a task runner.

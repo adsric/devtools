@@ -8,7 +8,7 @@ The following `run-s` will run commands in series, while `run-p` runs them in pa
 | cmd | recipe | description |
 |:---:|:---|:---|
 | `babeljs` | `babel src/js --out-dir .tmp` | Compile browser-compatible JavaScript from next generation syntax |
-| `browser-sync` |  `browser-sync start --server --files '**/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'` | Browser sync file changes on edit to the browser |
+| `browsersync` |  `browser-sync start --server --files '**/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'` | Browser sync file changes on edit to the browser |
 | `clean` | `rimraf dist/{*.js,**/*.js}` | Delete compiled files |
 | `hash` | `hashmark -l 12 -r 'dist/**/*.{js}' '{dir}/{name}.{hash}{ext}` | Append a md5 hash to compiled files |
 | `uglifyjs` | `uglifyjs .tmp/file1.js .tmp/file2.js --source-map bundle.js.map --compress --mangle --output dist/bundle.js && rimraf .tmp` | Takes a bunch of JavaScript files, parse the files in sequence and apply any compression options into a bundle file |

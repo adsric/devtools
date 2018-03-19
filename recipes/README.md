@@ -3,9 +3,9 @@
 The recipes are pre-configured `package.json` files that can be used as
 is for a new project or extended.
 
-1. [Prefix, Minify Stylesheets with PostCSS](postcss)
+1. [Prefix and Optimize Stylesheets with PostCSS](postcss)
 2. [Sprite a folder of SVG files with SVG Sprite](svgsprite)
-3. [Concatenate and minify JavaScript files with UglifyJS](uglifyjs)
+3. [Concatenate and Uglify JavaScript files with UglifyJS](uglifyjs)
 4. [Bundle JavaScript files with Webpack](webpack)
 
 ## Packages

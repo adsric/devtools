@@ -1,17 +1,17 @@
 {
-	"name": "npm-runner",
-	"description": "A npm task runner powered with cli packages.",
+	"name": "npm-run",
+	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
 		"browser-sync": "browser-sync start --server --files '**/*.css, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'",
 		"clean": "rimraf dist/{*.css,**/*.css}",
 		"hash": "hashmark -l 12 -r 'dist/**/*.{css}' '{dir}/{name}.{hash}{ext}' --silent",
-		"minify:css": "postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp",
-		"prefix:css": "postcss -u autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css",
+		"minify-css": "postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp",
+		"prefix-css": "postcss -u postcss-import autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css",
 		"watch:css": "onchange \"src/css\" -- run-s build:css",
 		"watch": "run-p serve watch:*",
 		"setup": "npm install && mkdir -p src/css",
-		"build:css": "run-s prefix:css minify:css",
+		"build:css": "run-s prefix-css minify-css",
 		"build": "run-s clean build:*",
 		"dev": "run-s clean build:css watch"
 	},
@@ -27,6 +27,7 @@
 		"npm-run-all": "^4.1.2",
 		"onchange": "^3.3.0",
 		"postcss-cli": "^5.0.0",
+		"postcss-import": "^11.1.0",
 		"rimraf": "^2.6.2"
 	}
 }

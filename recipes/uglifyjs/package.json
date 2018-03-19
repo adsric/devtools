@@ -1,17 +1,17 @@
 {
-	"name": "npm-runner",
-	"description": "A npm task runner powered with cli packages.",
+	"name": "npm-run",
+	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
-		"babeljs": "babel src/javascript --out-dir .tmp",
+		"babel-js": "babel src/javascript --out-dir .tmp",
 		"browser-sync": "browser-sync start --server --files '**/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'",
 		"clean": "rimraf dist/{*.js,**/*.js}",
 		"hash": "hashmark -l 12 -r 'dist/**/*.{js}' '{dir}/{name}.{hash}{ext}' --silent",
-		"uglifyjs": "uglifyjs .tmp/file1.js .tmp/file2.js --source-map bundle.js.map --compress --mangle --output dist/bundle.js && rimraf .tmp",
+		"uglify-js": "uglifyjs .tmp/file1.js .tmp/file2.js --source-map bundle.js.map --compress --mangle --output dist/bundle.js && rimraf .tmp",
 		"watch:js": "onchange \"src/javascript\" -- run-s build:js",
 		"watch": "run-p serve watch:*",
 		"setup": "npm install && mkdir -p src/javascript",
-		"build:js": "run-s babeljs uglifyjs",
+		"build:js": "run-s babel-js uglify-js",
 		"build": "run-s clean build:* hash",
 		"dev": "run-s clean build:js watch"
 	},

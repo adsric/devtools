@@ -1,9 +1,9 @@
 {
-	"name": "npm-runner",
-	"description": "A npm task runner powered with cli packages.",
+	"name": "npm-run",
+	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
-		"svg:sprite": "svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/svg/*.svg"
+		"svg-sprite": "svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/svg/*.svg"
 	},
 	"devDependencies": {
 		"svg-sprite": "^1.3.7"
