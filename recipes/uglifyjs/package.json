@@ -3,17 +3,12 @@
 	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
-		"babel-js": "babel src/javascript --out-dir .tmp",
-		"browser-sync": "browser-sync start --server --files '**/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'",
-		"clean": "rimraf dist/{*.js,**/*.js}",
-		"hash": "hashmark -l 12 -r 'dist/**/*.{js}' '{dir}/{name}.{hash}{ext}' --silent",
-		"uglify-js": "uglifyjs .tmp/file1.js .tmp/file2.js --source-map bundle.js.map --compress --mangle --output dist/bundle.js && rimraf .tmp",
-		"watch:js": "onchange \"src/javascript\" -- run-s build:js",
-		"watch": "run-p serve watch:*",
-		"setup": "npm install && mkdir -p src/javascript",
-		"build:js": "run-s babel-js uglify-js",
-		"build": "run-s clean build:* hash",
-		"dev": "run-s clean build:js watch"
+		"babel-js": "babel src/javascript --out-dir src/javascript-es5",
+		"clean": "rimraf ./dist",
+		"hash": "hashmark -l 20 -r 'dist/*.js' '{dir}/{name}.{hash}{ext}' --silent",
+		"uglify-js": "uglifyjs src/javascript-es5/input1.js src/javascript-es5/input2.js --source-map 'filename=bundle-es5.js.map' --compress --mangle --output dist/bundle-es5.js",
+		"build:js": "run-s babel-js uglify-js hash",
+		"build": "run-s clean build:*"
 	},
 	"babel": {
 		"presets": [
@@ -31,13 +26,10 @@
 	],
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
-		"babel-core": "^6.26.0",
 		"babel-preset-env": "^1.6.1",
-		"browser-sync": "^2.23.6",
 		"hashmark": "^5.0.0",
 		"npm-run-all": "^4.1.2",
-		"onchange": "^3.3.0",
 		"rimraf": "^2.6.2",
-		"uglify-js": "^3.3.14"
+		"uglify-es": "^3.3.10"
 	}
 }

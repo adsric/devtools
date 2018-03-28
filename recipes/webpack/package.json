@@ -3,13 +3,12 @@
 	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
-		"clean": "rimraf dist/{*.js,**/*.js,*.map,**/*.map}",
-		"webpack-dev": "webpack src/javascript/index.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.js' --watch",
-		"webpack-build": "webpack src/javascript/index.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.[hash].js'",
-		"setup": "npm install && mkdir -p src/javascript",
-		"build:js": "run-s webpack-build",
+		"clean": "rimraf ./dist",
+		"build:js": "webpack src/javascript/index.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.[hash].js'",
 		"build": "run-s clean build:*",
-		"dev": "run-s clean webpack-dev"
+		"watch:js": "webpack src/javascript/index.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.js' --watch",
+		"watch": "run-p watch:*",
+		"dev": "run-s clean watch"
 	},
 	"babel": {
 		"presets": [
@@ -26,7 +25,6 @@
 		"last 2 versions"
 	],
 	"devDependencies": {
-		"babel-core": "^6.26.0",
 		"babel-loader": "^7.1.4",
 		"babel-preset-env": "^1.6.1",
 		"npm-run-all": "^4.1.2",

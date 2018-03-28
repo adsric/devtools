@@ -3,10 +3,11 @@
 The recipes are pre-configured `package.json` files that can be used as
 is for a new project or extended.
 
-1. [Prefix and Optimize Stylesheets with PostCSS](postcss)
-2. [Sprite a folder of SVG files with SVG Sprite](svgsprite)
-3. [Concatenate and Uglify JavaScript files with UglifyJS](uglifyjs)
-4. [Bundle JavaScript files with Webpack](webpack)
+1. [Synchronised browser testing](browser-sync)
+2. [Compile, prefix and optimize Stylesheets with PostCSS](postcss)
+3. [Sprite a folder of SVG files with SVG Sprite](svgsprite)
+4. [Concatenate and Uglify JavaScript files with UglifyJS](uglifyjs)
+5. [Bundle JavaScript files with Webpack](webpack)
 
 ## Packages
 
@@ -22,5 +23,6 @@ is for a new project or extended.
 * [onchange](https://github.com/Qard/onchange)
 * [postcss-cli](https://github.com/code42day/postcss-cli)
 * [rimraf](https://github.com/isaacs/rimraf)
-* [uglify-js](https://github.com/mishoo/UglifyJS2)
+* [uglify-es](https://github.com/mishoo/UglifyJS2/tree/harmony)
 * [webpack](https://github.com/webpack/webpack)
+* [webpack-cli](https://github.com/webpack/webpack-cli)

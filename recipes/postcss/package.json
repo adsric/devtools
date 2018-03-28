@@ -3,17 +3,15 @@
 	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
-		"browser-sync": "browser-sync start --server --files '**/*.css, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'",
-		"clean": "rimraf dist/{*.css,**/*.css}",
-		"hash": "hashmark -l 12 -r 'dist/**/*.{css}' '{dir}/{name}.{hash}{ext}' --silent",
-		"minify-css": "postcss -u cssnano -d dist -b .tmp .tmp/*.css .tmp/**/*.css && rimraf .tmp",
-		"prefix-css": "postcss -u postcss-import autoprefixer -d .tmp -b src/css src/css/*.css src/css/**/*.css",
-		"watch:css": "onchange \"src/css\" -- run-s build:css",
-		"watch": "run-p serve watch:*",
-		"setup": "npm install && mkdir -p src/css",
-		"build:css": "run-s prefix-css minify-css",
+		"clean": "rimraf dist/{**/*.css}",
+		"hash": "hashmark -l 20 -r 'dist/*.css' '{dir}/{name}.{hash}{ext}' --silent",
+		"compile-css": "postcss src/css/*.css --use postcss-import --use autoprefixer --dir dist",
+		"minify-css": "postcss dist/*.css --use cssnano --replace",
+		"build:css": "run-s compile-css minify-css hash",
 		"build": "run-s clean build:*",
-		"dev": "run-s clean build:css watch"
+		"watch:css": "postcss src/css/*.css --use postcss-import --use autoprefixer --dir dist --watch",
+		"watch": "run-p watch:*",
+		"dev": "run-s clean watch"
 	},
 	"browserslist": [
 		"> 1%",
@@ -21,11 +19,9 @@
 	],
 	"devDependencies": {
 		"autoprefixer": "^8.1.0",
-		"browser-sync": "^2.23.6",
-		"cssnano": "^3.10.0",
+		"cssnano": "^4.0.0-rc.2",
 		"hashmark": "^5.0.0",
 		"npm-run-all": "^4.1.2",
-		"onchange": "^3.3.0",
 		"postcss-cli": "^5.0.0",
 		"postcss-import": "^11.1.0",
 		"rimraf": "^2.6.2"
