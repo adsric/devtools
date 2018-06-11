@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"babel-js": "babel src/javascript --out-dir src/javascript-es5",
-		"clean": "rimraf ./dist",
+		"clean": "rimraf ./dist/*",
 		"hash": "hashmark -l 20 -r 'dist/*.js' '{dir}/{name}.{hash}{ext}' --silent",
 		"uglify-js": "uglifyjs src/javascript-es5/input1.js src/javascript-es5/input2.js --source-map 'filename=bundle-es5.js.map' --compress --mangle --output dist/bundle-es5.js",
 		"build:js": "run-s babel-js uglify-js hash",

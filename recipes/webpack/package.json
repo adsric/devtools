@@ -3,7 +3,7 @@
 	"description": "npm run as a task runner powered with npm scripts, uses cli packages.",
 	"private": true,
 	"scripts": {
-		"clean": "rimraf ./dist",
+		"clean": "rimraf ./dist/*",
 		"build:js": "webpack src/javascript/index.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.[hash].js'",
 		"build": "run-s clean build:*",
 		"watch:js": "webpack src/javascript/index.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='bundle.js' --watch",
@@ -25,6 +25,7 @@
 		"last 2 versions"
 	],
 	"devDependencies": {
+		"babel-core": "^6.26.3",
 		"babel-loader": "^7.1.4",
 		"babel-preset-env": "^1.6.1",
 		"npm-run-all": "^4.1.2",

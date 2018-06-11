@@ -9,7 +9,7 @@ Documentation on [webpack](https://webpack.js.org/concepts/) and [webpack-cli](h
 
 | cmd | recipe | description |
 |:---:|:---|:---|
-| `clean` | `rimraf ./dist` | Delete compiled dir |
+| `clean` | `rimraf ./dist/*` | Delete compiled assets in dir |
 | `build:js` | `webpack index=./src/javascript/index1.js index2=./src/javascript/index2.js --devtool source-map --mode production --module-bind js=babel-loader --output-path='./dist' --output-filename='[name].bundle.[hash].js''` | Bundle and Optimize JavaScript with Webpack |
 | `build` | `run-s clean build:*` | Alias to run `clean` and all `build` commands |
 | `watch:js` | `webpack index=./src/javascript/index1.js index2=./src/javascript/index2.js --devtool cheap-module-inline-source-map --mode development --module-bind js=babel-loader --output-path='./dist' --output-filename='[name].bundle.js' --watch` | Bundle JavaScript with Webpack and watch for file changes |

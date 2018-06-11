@@ -6,7 +6,7 @@ The following `run-s` will run commands in series, while `run-p` runs them in pa
 
 | cmd | recipe | description |
 |:---:|:---|:---|
-| `clean` | `rimraf ./dist` | Delete compiled dir |
+| `clean` | `rimraf ./dist/{**/*.css}` | Delete compiled stylesheets in dir |
 | `hash` | `hashmark -l 20 -r 'dist/*.css' '{dir}/{name}.{hash}{ext}` | Append a md5 hash to compiled Stylesheet files |
 | `compile-css` | `postcss src/css/*.css --use postcss-import --use autoprefixer --dir dist` | Concat and add vendor prefixes to CSS files |
 | `minify-css` | `postcss dist/*.css --use cssnano --replace` | Minify CSS files |

@@ -17,6 +17,14 @@
 		"> 1%",
 		"last 2 versions"
 	],
+	"cssnano": {
+		"preset": [
+			"default",
+			{
+				"colormin": false
+			}
+		]
+	},
 	"devDependencies": {
 		"autoprefixer": "^8.1.0",
 		"cssnano": "^4.0.0-rc.2",
