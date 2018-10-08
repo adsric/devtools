@@ -6,6 +6,6 @@
 		"svg-sprite": "svg-sprite --symbol --symbol-dest=dist --symbol-sprite=sprite.svg --symbol-inline src/svg/*.svg"
 	},
 	"devDependencies": {
-		"svg-sprite": "^1.4.0"
+		"svg-sprite": "^1.5.0"
 	}
 }

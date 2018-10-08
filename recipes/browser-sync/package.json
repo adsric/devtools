@@ -6,6 +6,6 @@
 		"browser-sync": "browser-sync start --server --files '**/*.css, **/*.js, !node_modules/**/*' --port 7777 --proxy 'localhost' --browser 'FirefoxDeveloperEdition'"
 	},
 	"devDependencies": {
-		"browser-sync": "^2.24.4"
+		"browser-sync": "^2.26.0"
 	}
 }
