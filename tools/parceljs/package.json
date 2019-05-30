@@ -1,0 +1,37 @@
+{
+	"name": "devtools",
+	"version": "1.0.0",
+	"description": "A set of web developer tools for development",
+	"main": "src/index.js",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "npm run clean && npm run dev",
+		"build": "npm run clean && parcel build ./src/index.html --public-url ./",
+		"clean": "rm -rf .cache ./dist",
+		"dev": "parcel ./src/index.js --hmr-hostname localhost --hmr-port 8080 --public-url ./"
+	},
+  	"babel": {
+		"presets": [
+			"@babel/preset-env"
+		]
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions"
+	],
+	"cssnano": {
+		"preset": [
+			"default",
+			{
+				"colormin": false
+			}
+		]
+	},
+	"devDependencies": {
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5",
+		"autoprefixer": "^9.5.1",
+		"parcel-bundler": "^1.12.3"
+	}
+}

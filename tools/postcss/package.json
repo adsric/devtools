@@ -1,0 +1,36 @@
+{
+	"name": "devtools",
+	"version": "1.0.0",
+	"description": "A set of web developer tools for development",
+	"main": "src/index.css",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "npm run clean && npm run dev",
+		"build": "npm run clean && npm run compile && npm run minify && npm run hash",
+		"clean": "rm -rf ./dist",
+		"compile": "postcss src/index.css --use postcss-import --use autoprefixer --dir dist",
+		"dev": "postcss src/index.css --use postcss-import --use autoprefixer --dir dist --watch",
+		"hash": "hashmark -l 8 -r 'dist/*.{css}' '{dir}/{name}.{hash}{ext}' --silent",
+		"minify": "postcss dist/*.css --use cssnano --replace"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions"
+	],
+	"cssnano": {
+		"preset": [
+			"default",
+			{
+				"colormin": false
+			}
+		]
+	},
+	"devDependencies": {
+		"autoprefixer": "^9.5.1",
+		"cssnano": "^4.1.10",
+		"hashmark": "^5.0.0",
+		"postcss-cli": "^6.1.2",
+		"postcss-import": "^12.0.1"
+	}
+}

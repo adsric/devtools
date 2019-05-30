@@ -1,0 +1,10 @@
+{
+	"name": "devtools",
+	"version": "1.0.0",
+	"description": "A set of web developer tools for development",
+	"main": "index.js",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
+}
